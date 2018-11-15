@@ -33,8 +33,9 @@ class BD_Escuela:
         with open ('Usuarios.txt', 'w') as f:
             for clave in mapa.keys():
                 f.write(clave+':'+mapa[clave]+'\n')
-'''
-Registrar Un Usuario: permite crear un usuario asignándole un nombre
-de usuario, con la condición de administrador, docente o alumno y una
-contraseña. (RegUs)
-'''
+
+    def eliminar_usuario(self, usr, mapa):
+        shallow_copy = dict(mapa)
+        del shallow_copy[usr]
+        self.grabar_usuarios(shallow_copy)
+        return shallow_copy
