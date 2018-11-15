@@ -2,10 +2,13 @@ from tkinter import *
 # import tkinter.ttk as tkk
 from Clases.BD_Escuela import BD_Escuela
 from Clases.T_Alumnos import T_Alumnos
+
 FUENTE = 'Tahoma'
 TAMANOF = '14'
 
 talumno = T_Alumnos()
+bd = BD_Escuela()
+
 
 def swap_view(old_view, new_view):
     old_view.terminate()
@@ -14,13 +17,15 @@ def swap_view(old_view, new_view):
     elif new_view == 'login':
         Login(root)
     elif new_view == 'registrar_usuario':
-        Reg_Us(root)
+        RegUs(root)
     elif new_view == 'eliminar_usuario':
-        Elim_Us(root)
+        ElimUs(root)
+
 
 def center(n):
     # Center window
     n.eval('tk::PlaceWindow %s center' % n.winfo_pathname(n.winfo_id()))
+
 
 class Login:
     # Constantes
@@ -34,15 +39,6 @@ class Login:
         self.clave = StringVar()
         self.om_selected = StringVar()
         self.om_selected.set('Programador')
-        # Apariencia ventana
-        w = 640  # ancho
-        h = 480  # alto
-        # alto y ancho de la pantalla
-        ws = self.frame.winfo_screenwidth()  # ancho de la pantalla
-        hs = self.frame.winfo_screenheight()  # alto de la pantalla
-        # calculo el lugar para que la ventana este centrada
-        x = (ws / 2) - (w / 2)
-        y = (hs / 2) - (h / 2)
         # Creo la matriz
         self.frame.columnconfigure(0, weight=0)
         self.frame.columnconfigure(1, weight=1)
@@ -120,7 +116,6 @@ class Login:
     def comprobar_clave(self):
         self.label_pass_incorrecta.grid_remove()
         self.label_usr_incorrecto.grid_remove()
-        bd = BD_Escuela()
         usuarios = bd.cargar_usuarios()
         usr = ''
         if self.om_selected.get() == 'Programador':
@@ -145,9 +140,11 @@ class Login:
         self.frame.pack_forget()
         self.frame.destroy()
 
+
 # ******************************************************************************************************************** #
 class MenuPrincipalP(Frame):
-    def __init__(self, master):
+    def __init__(self, master, **kw):
+        super().__init__(master, **kw)
         self.frame = Frame(master)
         self.frame.pack()
         # Set title
@@ -190,7 +187,7 @@ class MenuPrincipalP(Frame):
                                   columnspan=1,
                                   sticky=E + W)
         self.button_abmc_alu = Button(self.frame,
-                                         text="ABMC Alumno")
+                                      text="ABMC Alumno")
         self.button_abmc_alu.grid(pady=0,
                                   ipadx=75,
                                   row=4,
@@ -198,7 +195,7 @@ class MenuPrincipalP(Frame):
                                   columnspan=1,
                                   sticky=E + W)
         self.button_abmc_mat = Button(self.frame,
-                                         text="ABMC Materias")
+                                      text="ABMC Materias")
         self.button_abmc_mat.grid(pady=0,
                                   ipadx=75,
                                   row=5,
@@ -206,7 +203,7 @@ class MenuPrincipalP(Frame):
                                   columnspan=1,
                                   sticky=E + W)
         self.button_back_up = Button(self.frame,
-                                        text="BackUp")
+                                     text="BackUp")
         self.button_back_up.grid(pady=50,
                                  ipadx=75,
                                  row=0,
@@ -214,7 +211,7 @@ class MenuPrincipalP(Frame):
                                  columnspan=2,
                                  sticky=N + E + W)
         self.button_list_t_alu = Button(self.frame,
-                                           text="Tabla Alumnos")
+                                        text="Tabla Alumnos")
         self.button_list_t_alu.grid(pady=0,
                                     ipadx=0,
                                     row=1,
@@ -222,7 +219,7 @@ class MenuPrincipalP(Frame):
                                     columnspan=1,
                                     sticky=E + W)
         self.button_list_t_mat = Button(self.frame,
-                                           text="Tabla Materias")
+                                        text="Tabla Materias")
         self.button_list_t_mat.grid(pady=0,
                                     ipadx=75,
                                     row=2,
@@ -230,7 +227,7 @@ class MenuPrincipalP(Frame):
                                     columnspan=1,
                                     sticky=E + W)
         self.button_list_leg_a = Button(self.frame,
-                                           text="Legajo")
+                                        text="Legajo")
         self.button_list_leg_a.grid(pady=0,
                                     ipadx=75,
                                     row=3,
@@ -238,7 +235,7 @@ class MenuPrincipalP(Frame):
                                     columnspan=1,
                                     sticky=E + W)
         self.button_list_inas = Button(self.frame,
-                                          text="Solicitudes de readmision")
+                                       text="Solicitudes de readmision")
         self.button_list_inas.grid(pady=0,
                                    ipadx=75,
                                    row=4,
@@ -246,7 +243,7 @@ class MenuPrincipalP(Frame):
                                    columnspan=1,
                                    sticky=E + W)
         self.button_lis_reg_curso = Button(self.frame,
-                                              text="Listado Alumnos")
+                                           text="Listado Alumnos")
         self.button_lis_reg_curso.grid(pady=0,
                                        ipadx=75,
                                        row=5,
@@ -261,9 +258,11 @@ class MenuPrincipalP(Frame):
         self.frame.pack_forget()
         self.frame.destroy()
 
+
 # ******************************************************************************************************************** #
-class Reg_Us(Frame):
-    def __init__(self, master):
+class RegUs(Frame):
+    def __init__(self, master, **kw):
+        super().__init__(master, **kw)
         self.frame = Frame(master)
         self.frame.pack()
         # Set title
@@ -308,15 +307,15 @@ class Reg_Us(Frame):
                               sticky=E + N)
         # Campos de texto
         self.entry_usuario = Entry(self.frame,
-                                    textvariable=self.usuario)
+                                   textvariable=self.usuario)
         self.entry_usuario.grid(pady=0,
                                 row=2,
                                 column=3,
                                 sticky=E + W)
         self.entry_clave = Entry(self.frame,
-                                    show='•',
-                                    font=(FUENTE, TAMANOF),
-                                    textvariable=self.clave)
+                                 show='•',
+                                 font=(FUENTE, TAMANOF),
+                                 textvariable=self.clave)
         self.entry_clave.grid(row=3,
                               column=3,
                               sticky=E + W + N)
@@ -331,58 +330,54 @@ class Reg_Us(Frame):
         # Botones
         self.button_registrar = Button(self.frame,
                                        text="Registrar",
-                                       command= self.registrar)
+                                       command=self.registrar)
         self.button_registrar.grid(pady=0,
-                                 ipadx=75,
-                                 row=6,
-                                 column=1,
-                                 columnspan=2,
-                                 sticky=N)
+                                   ipadx=75,
+                                   row=6,
+                                   column=1,
+                                   columnspan=2,
+                                   sticky=N)
         self.button_volver = Button(self.frame,
                                     text='Volver',
                                     command=lambda: swap_view(self, 'MP'))
 
         self.button_volver.grid(pady=0,
-                                   ipadx=75,
-                                   row=6,
-                                   column=3,
-                                   columnspan=2,
-                                   sticky=N)
+                                ipadx=75,
+                                row=6,
+                                column=3,
+                                columnspan=2,
+                                sticky=N)
         center(master)
 
     def registrar(self):
-        bd = BD_Escuela()
         usuarios = bd.cargar_usuarios()
         usr = ''
-        tipo = ''
         if self.om_selected.get() == 'Programador':
             usr = 'P-' + self.usuario.get()
-            tipo = 'P'
         if self.om_selected.get() == 'Docente':
             usr = 'D-' + self.usuario.get()
         if self.om_selected.get() == 'Alumno':
             usr = 'A-' + self.usuario.get()
-            tipo = 'A'
         clv = self.clave.get()
         user = usuarios.get(usr)
         if usr == '' or clv == '':
             user = None
         if user is None:
-            if tipo == 'A':
-                talumno.registrar_usuario(usr, clv)
-            else:
-                bd.registrar_usuario(usr, clv, usuarios)
+            bd.registrar_usuario(usr, clv, usuarios)
         else:
             self.label_usr_incorrecto.grid()
 
     def terminate(self):
         self.frame.pack_forget()
         self.frame.destroy()
+
+
 # ******************************************************************************************************************** #
 
 
-class Elim_Us(Frame):
-    def __init__(self, master):
+class ElimUs(Frame):
+    def __init__(self, master, **kw):
+        super().__init__(master, **kw)
         self.frame = Frame(master)
         self.frame.pack()
         # Set title
@@ -420,13 +415,13 @@ class Elim_Us(Frame):
         self.label_usr_incorrecto.config(fg='red')
         self.label_usr_incorrecto.grid_remove()
         self.label_estado = Label(self.frame,
-                                 text="Eliminado:")
+                                  text="Eliminado:")
         self.label_estado.grid(row=3,
-                              column=1,
-                              sticky=E + N)
+                               column=1,
+                               sticky=E + N)
         # Campos de texto
         self.entry_usuario = Entry(self.frame,
-                                    textvariable=self.usuario)
+                                   textvariable=self.usuario)
         self.entry_usuario.grid(pady=0,
                                 row=2,
                                 column=3,
@@ -434,8 +429,8 @@ class Elim_Us(Frame):
         self.label_Estado = Label(self.frame,
                                   text="No:")
         self.label_Estado.grid(row=3,
-                              column=3,
-                              sticky=E + W + N)
+                               column=3,
+                               sticky=E + W + N)
         # Option Menu
         self.opt1 = OptionMenu(self.frame, self.om_selected, 'Programador', 'Docente', 'Alumno')
         self.opt1.grid(pady=0,
@@ -447,42 +442,36 @@ class Elim_Us(Frame):
         # Botones
         self.button_registrar = Button(self.frame,
                                        text="Eliminar",
-                                       command= self.eliminar)
+                                       command=self.eliminar)
         self.button_registrar.grid(pady=0,
-                                 ipadx=75,
-                                 row=6,
-                                 column=1,
-                                 columnspan=2,
-                                 sticky=N)
+                                   ipadx=75,
+                                   row=6,
+                                   column=1,
+                                   columnspan=2,
+                                   sticky=N)
         self.button_volver = Button(self.frame,
                                     text='Volver',
                                     command=lambda: swap_view(self, 'MP'))
 
         self.button_volver.grid(pady=0,
-                                   ipadx=75,
-                                   row=6,
-                                   column=3,
-                                   columnspan=2,
-                                   sticky=N)
+                                ipadx=75,
+                                row=6,
+                                column=3,
+                                columnspan=2,
+                                sticky=N)
         center(master)
 
     def eliminar(self):
-        bd = BD_Escuela()
         usuarios = bd.cargar_usuarios()
         usr = ''
-        tipo = ''
         if self.om_selected.get() == 'Programador':
             usr = 'P-' + self.usuario.get()
-            tipo = 'P'
         if self.om_selected.get() == 'Docente':
             usr = 'D-' + self.usuario.get()
         if self.om_selected.get() == 'Alumno':
             usr = 'A-' + self.usuario.get()
-            tipo = 'A'
         user = usuarios.get(usr)
-        if not(user is None):
-            if tipo == 'A':
-                talumno.eliminar_usuario(usr)
+        if not (user is None):
             bd.eliminar_usuario(usr, usuarios)
             self.label_Estado.config(text='Si')
         else:
@@ -491,6 +480,7 @@ class Elim_Us(Frame):
     def terminate(self):
         self.frame.pack_forget()
         self.frame.destroy()
+
 
 root = Tk()
 # Set login

@@ -10,16 +10,15 @@ class BD_Escuela:
         self.tablas = ['T_Alumnos', 'T_Materias']
 
     def cargar_usuarios(self):
-        mapa = {}
         with open('Usuarios.txt', 'r') as f:
             for linea in f:
                 usuario = linea.split(':')
                 user = usuario[0]
                 clave = usuario[1]
                 clave = clave[0:-1]
-                mapa[user] = clave
+                self.acceso[user] = clave
         f.close()
-        return mapa
+        return self.acceso
 
     def registrar_usuario(self, user, pass_, mapa):
         map_ = mapa
@@ -39,3 +38,6 @@ class BD_Escuela:
         del shallow_copy[usr]
         self.grabar_usuarios(shallow_copy)
         return shallow_copy
+
+    def cargar_alumnos(self):
+        asd = 1
