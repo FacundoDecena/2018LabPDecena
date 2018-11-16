@@ -918,7 +918,9 @@ class ABMCAlumno(Frame):
                 mats[8].set_calificacion1er(n91)
                 mats[8].set_calificacion2do(n92)
                 mats[8].set_calificacion3er(n93)
-                alumno.mod_alumno(us,)
+                alumno.mod_alumno(us, cl, no, ap, dn, di, te, em, na, cu, al, ba, co, ina, mats)
+                talumno.cargar_alumno(alumno)
+                swap_view(self, 'ABMCA')
         except SyntaxError:
             self.label_error.config(text='Hay campos con errores')
 

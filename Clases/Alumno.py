@@ -103,7 +103,7 @@ class Alumno:
         self.__materias=materias
 
     def mod_alumno(self, userp, passwordp, nombrep, apellidop, dnip, direccionp, telefonop, emailp,
-                   nacimientop, cursop, altap, bajap, conceptop, inasistenciap, materiasp, maximop):
+                   nacimientop, cursop, altap, bajap, conceptop, inasistenciap, materiasp):
         self.__usuario = userp
         self.__clave = passwordp
         self.__nombre = nombrep
@@ -119,7 +119,6 @@ class Alumno:
         self.__concepto = conceptop
         self.__inasistencia = inasistenciap
         self.__materias = materiasp
-        self.__maximo = maximop
 
     def control_password(self, password):
         return self.__clave == password
