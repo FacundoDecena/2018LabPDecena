@@ -511,8 +511,11 @@ class BuscarArchivo(Frame):
 
     def aceptar(self):
         global arch
-        arch = self.nombre.get()
+        arch = self.nombre.get()+'.txt'
+        f = open(arch, 'w')
+        f.close()
         bd.cargar_alumnos(arch, talumno)
+        self.label_aviso.config(text=arch+' Abierto')
 
     def buscar(self):
         options = {'initialdir': os.getcwd()}
