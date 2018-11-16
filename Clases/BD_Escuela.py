@@ -108,3 +108,11 @@ class BD_Escuela:
                 alumno.set_materias(materias)
                 talumnos.cargar_alumno(alumno)
         f.close()
+
+    def grabar_alumnos(self, talumnos:T_Alumnos, arch):
+        alumnos_aux = talumnos.get_lista()
+        alumnos = list(alumnos_aux.items())
+        with open (arch, 'w') as f:
+            for alumno in alumnos:
+                f.write(str(alumno[1])+'\n')
+        f.close()

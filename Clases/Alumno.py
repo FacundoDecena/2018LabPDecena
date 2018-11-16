@@ -120,6 +120,37 @@ class Alumno:
         self.__inasistencia = inasistenciap
         self.__materias = materiasp
 
+    def __str__(self):
+        re = str(self.__nro_registro)
+        us = self.__usuario
+        cl = self.__clave
+        no = self.__nombre
+        ap = self.__apellido
+        dn = str(self.__dni)
+        di = self.__direccion
+        te = str(self.__telefono)
+        em = self.__email
+        na = str(self.__nacimiento)
+        cu = self.__curso
+        al = str(self.__alta_colegio)
+        ba = str(self.__baja_colegio)
+        co = self.__concepto
+        ina = str(self.__inasistencia)
+        ma = str(self.__maximo)
+        mate = self.__materias[0].calif_to_string()
+        leng = self.__materias[1].calif_to_string()
+        fisi = self.__materias[2].calif_to_string()
+        qui = self.__materias[3].calif_to_string()
+        bio = self.__materias[4].calif_to_string()
+        eti = self.__materias[5].calif_to_string()
+        his = self.__materias[6].calif_to_string()
+        geo = self.__materias[7].calif_to_string()
+        comp = self.__materias[8].calif_to_string()
+        cadena = re + ';' + us+ ';' + cl + ';' + no + ';' + ap + ';' + dn + ';' + di + ';' + te + ';' + em + ';' + na
+        cadena = cadena +';' + cu + ';' + al + ';' + ba + ';' + co + ';' + ina + ';' + ma +';' + mate +';' + leng
+        cadena = cadena +';' + fisi +';' + qui +';' + bio +';' + eti +';' + his +';' + geo +';' + comp
+        return cadena
+
     def control_password(self, password):
         return self.__clave == password
 

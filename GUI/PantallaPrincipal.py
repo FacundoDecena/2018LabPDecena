@@ -9,6 +9,7 @@ from Clases.Materia import Materia
 FUENTE = 'Tahoma'
 TAMANOF = '14'
 
+global arch
 talumno = T_Alumnos()
 bd = BD_Escuela()
 
@@ -192,7 +193,7 @@ class MenuPrincipalP(Frame):
                                   columnspan=1,
                                   sticky=E + W)
         self.button_abmc_alu = Button(self.frame,
-                                      text="ABMC Alumno",
+                                      text="ABMC",
                                       command=lambda: swap_view(self, 'ABMCA'))
         self.button_abmc_alu.grid(pady=0,
                                   ipadx=75,
@@ -200,22 +201,15 @@ class MenuPrincipalP(Frame):
                                   column=0,
                                   columnspan=1,
                                   sticky=E + W)
-        self.button_abmc_mat = Button(self.frame,
-                                      text="ABMC Materias")
-        self.button_abmc_mat.grid(pady=0,
+
+        self.button_back_up = Button(self.frame,
+                                     text="BackUp")
+        self.button_back_up.grid(pady=0,
                                   ipadx=75,
                                   row=5,
                                   column=0,
                                   columnspan=1,
                                   sticky=E + W)
-        self.button_back_up = Button(self.frame,
-                                     text="BackUp")
-        self.button_back_up.grid(pady=50,
-                                 ipadx=75,
-                                 row=0,
-                                 column=0,
-                                 columnspan=2,
-                                 sticky=N + E + W)
         self.button_list_t_alu = Button(self.frame,
                                         text="Tabla Alumnos")
         self.button_list_t_alu.grid(pady=0,
@@ -261,8 +255,8 @@ class MenuPrincipalP(Frame):
         center(master)
 
     def buscar_archivo(self):
-        options = {}
-        options['initialdir'] = os.getcwd()
+        options = {'initialdir': os.getcwd()}
+        global arch
         arch = askopenfilename(**options)
         if arch == "":
             return None
@@ -744,6 +738,7 @@ class ABMCAlumno(Frame):
 
 
     def alta(self):
+        self.label_error.config(text=' ')
         try:
             nacimiento = eval('('+str(self.nacimientos.get())+')')
             alta_colegio = eval('('+str(self.alta_colegios.get())+')')
@@ -767,6 +762,8 @@ class ABMCAlumno(Frame):
                 alumno.set_materias(materias)
                 talumno.cargar_alumno(alumno)
                 bd.registrar_usuario('A-'+str(self.usuario.get()),self.clave.get())
+                global arch
+                bd.grabar_alumnos(talumno,arch)
                 swap_view(self,'ABMCA')
             else:
                 self.label_error.config(text='El numero de registro ya existe')
@@ -774,6 +771,7 @@ class ABMCAlumno(Frame):
             self.label_error.config(text='Hay campos con errores')
 
     def baja(self):
+        self.label_error.config(text=' ')
         try:
             nroreg = int(self.nro_registro.get())
             alumno = talumno.buscar_alumno(nroreg)
@@ -788,6 +786,7 @@ class ABMCAlumno(Frame):
             self.label_error.config(text='Hay campos con errores')
 
     def consultar(self):
+        self.label_error.config(text=' ')
         try:
             nroreg = int(self.nro_registro.get())
             alumno = talumno.buscar_alumno(nroreg)
@@ -843,6 +842,7 @@ class ABMCAlumno(Frame):
             self.label_error.config(text='Hay campos con errores')
 
     def modificar(self):
+        self.label_error.config(text=' ')
         try:
             nroreg = int(self.nro_registro.get())
             alumno = talumno.buscar_alumno(nroreg)
@@ -920,6 +920,8 @@ class ABMCAlumno(Frame):
                 mats[8].set_calificacion3er(n93)
                 alumno.mod_alumno(us, cl, no, ap, dn, di, te, em, na, cu, al, ba, co, ina, mats)
                 talumno.cargar_alumno(alumno)
+                global arch
+                bd.grabar_alumnos(talumno,arch)
                 swap_view(self, 'ABMCA')
         except SyntaxError:
             self.label_error.config(text='Hay campos con errores')

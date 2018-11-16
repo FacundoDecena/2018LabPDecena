@@ -25,6 +25,9 @@ class T_Alumnos:
         except KeyError:
             return None
 
+    def get_lista(self):
+        return self.__lista
+
     def __iter__(self):
         return iter(self.__lista)
 

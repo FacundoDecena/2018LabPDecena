@@ -1,2 +1,7 @@
 P-Admin:ad1
 D-Docente:1234
+Alumno:123
+A-Alumno2:clv
+A-asdasd:asdasdasd
+A-Loco:asdasdasd
+A-A-Locoa:asdasdasd
