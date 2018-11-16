@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter.filedialog import *
 # import tkinter.ttk as tkk
 from Clases.BD_Escuela import BD_Escuela
 from Clases.T_Alumnos import T_Alumnos
@@ -10,7 +11,6 @@ TAMANOF = '14'
 
 talumno = T_Alumnos()
 bd = BD_Escuela()
-
 
 def swap_view(old_view, new_view):
     old_view.terminate()
@@ -183,7 +183,8 @@ class MenuPrincipalP(Frame):
                                  columnspan=1,
                                  sticky=E + W)
         self.button_carga_bd = Button(self.frame,
-                                      text="Inicializar sesión de trabajo")
+                                      text="Inicializar sesión de trabajo",
+                                      command = self.buscar_archivo)
         self.button_carga_bd.grid(pady=0,
                                   ipadx=75,
                                   row=3,
@@ -258,6 +259,15 @@ class MenuPrincipalP(Frame):
 
         # Center
         center(master)
+
+    def buscar_archivo(self):
+        options = {}
+        options['initialdir'] = os.getcwd()
+        arch = askopenfilename(**options)
+        if arch == "":
+            return None
+        else:
+            bd.cargar_alumnos(arch, talumno)
 
     def terminate(self):
         self.frame.pack_forget()
@@ -493,16 +503,6 @@ class ABMCAlumno(Frame):
         self.frame.pack()
         # Set title
         master.title('ABMC')
-        # Creo la matriz
-        '''self.frame.columnconfigure(0, weight=0)
-        self.frame.columnconfigure(1, weight=1)
-        self.frame.rowconfigure(0, weight=1)
-        self.frame.rowconfigure(1, weight=1)
-        self.frame.rowconfigure(2, weight=1)
-        self.frame.rowconfigure(3, weight=1)
-        self.frame.rowconfigure(4, weight=1)
-        self.frame.rowconfigure(5, weight=1)
-        self.frame.rowconfigure(6, weight=1)'''
         # las 30000 Variables para usar en widgets
         self.nro_registro = IntVar()
         nreg = talumno.nuevo_nro_registro()
