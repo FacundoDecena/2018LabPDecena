@@ -20,7 +20,9 @@ class Alumno:
     # __inasistencia :: int
     # __materias :: [Materia]
     # __maximo :: 15
-    def __init__(self, nro_registrop=0, userp='', passwordp='', nombrep='', apellidop='a', dnip=0, direccionp='', telefonop=4, emailp='', nacimientop=(0,0,0), cursop='', altap=(0,0,0), bajap=(0,0,0), conceptop=''):
+    def __init__(self, nro_registrop=0, userp='', passwordp='', nombrep='', apellidop='a', dnip=0, direccionp='',
+                 telefonop=0, emailp='', nacimientop=(0,0,0), cursop='', altap=(0,0,0), bajap=(0,0,0), conceptop='',
+                 inasistenciap=0,maximop=15):
         self.__nro_registro = nro_registrop
         self.__usuario = userp
         self.__clave = passwordp
@@ -35,18 +37,22 @@ class Alumno:
         self.__alta_colegio = altap
         self.__baja_colegio = bajap
         self.__concepto = conceptop
-        self.__inasistencia = 0
+        self.__inasistencia = inasistenciap
         self.__materias = [Materia(0, 'Matematica', -1, -1, -1), Materia(1, 'Lengua', -1, -1, -1),
                            Materia(2, 'Fisica', -1, -1, -1), Materia(3, 'Quimica', -1, -1, -1),
                            Materia(4, 'Biologia', -1, -1, -1), Materia(5, 'Etica', -1, -1, -1),
-                           Materia(5, 'Historia', -1, -1, -1), Materia(5, 'Geografia', -1, -1, -1),
-                           Materia(5, 'Computacion', -1, -1, -1)]
-        self.__maximo = 15
+                           Materia(6, 'Historia', -1, -1, -1), Materia(7, 'Geografia', -1, -1, -1),
+                           Materia(8, 'Computacion', -1, -1, -1)]
+        self.__maximo = maximop
 
-    # Getters
-
-    def get_nro_registro(self):
+    def get_numero_registro(self):
         return self.__nro_registro
+
+    def get_usuario(self):
+        return self.__usuario
+
+    def get_clave(self):
+        return self.__clave
 
     def get_nombre(self):
         return self.__nombre
@@ -78,12 +84,6 @@ class Alumno:
     def get_baja(self):
         return self.__baja_colegio
 
-    def get_user(self):
-        return self.__usuario
-
-    def get_clave(self):
-        return self.__clave
-
     def get_concepto(self):
         return self.__concepto
 
@@ -96,60 +96,30 @@ class Alumno:
     def get_maximo(self):
         return self.__maximo
 
-    # Setters
+    def set_baja(self,baja):
+        self.__baja_colegio = baja
 
-    def set_nro_registro(self, nro_registrop):
-        self.__nro_registro = nro_registrop
+    def set_materias(self, materias):
+        self.__materias=materias
 
-    def set_nombre(self, nombrep):
-        self.__nombre = nombrep
-
-    def set_apellido(self, apellidop):
-        self.__apellido = apellidop
-
-    def set_dni(self, dnip):
-        self.__dni = dnip
-
-    def set_direccion(self, direccionp):
-        self.__direccion = direccionp
-
-    def set_telefono(self, telefonop):
-        self.__telefono = telefonop
-
-    def set_email(self, emailp):
-        self.__email = emailp
-
-    def set_nacimiento(self, nacimientop):
-        self.__nacimiento = nacimientop
-
-    def set_curso(self, cursop):
-        self.__curso = cursop
-
-    def set_alta(self, altap):
-        self.__alta_colegio = altap
-
-    def set_baja(self, bajap):
-        self.__baja_colegio = bajap
-
-    def set_user(self, userp):
+    def mod_alumno(self, userp, passwordp, nombrep, apellidop, dnip, direccionp, telefonop, emailp,
+                   nacimientop, cursop, altap, bajap, conceptop, inasistenciap, materiasp, maximop):
         self.__usuario = userp
-
-    def set_clave(self, passwordp):
         self.__clave = passwordp
-
-    def set_concepto(self, conceptop):
+        self.__nombre = nombrep
+        self.__apellido = apellidop
+        self.__dni = dnip
+        self.__direccion = direccionp
+        self.__telefono = telefonop
+        self.__email = emailp
+        self.__nacimiento = nacimientop
+        self.__curso = cursop
+        self.__alta_colegio = altap
+        self.__baja_colegio = bajap
         self.__concepto = conceptop
-
-    def set_inasistencia(self, inasistenciap):
         self.__inasistencia = inasistenciap
-
-    def set_materias(self, materiasp:[Materia]):
         self.__materias = materiasp
-
-    def set_maximo(self, maximop):
         self.__maximo = maximop
-
-    # Others Methods
 
     def control_password(self, password):
         return self.__clave == password
