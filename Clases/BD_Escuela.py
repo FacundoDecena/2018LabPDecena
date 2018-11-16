@@ -50,7 +50,8 @@ class BD_Escuela:
                 datos_alumno = linea.split(';')
                 nro_registro1 = datos_alumno[0]
                 nro_registro = int(nro_registro1)
-                usuario = datos_alumno[1]
+                usuario1 = datos_alumno[1]
+                usuario = usuario1[2:]
                 clave = datos_alumno[2]
                 nombre = datos_alumno[3]
                 apellido = datos_alumno[4]

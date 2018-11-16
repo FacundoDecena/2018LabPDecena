@@ -13,6 +13,7 @@ global arch
 talumno = T_Alumnos()
 bd = BD_Escuela()
 
+
 def swap_view(old_view, new_view):
     old_view.terminate()
     if new_view == 'MP':
@@ -25,6 +26,8 @@ def swap_view(old_view, new_view):
         ElimUs(root)
     elif new_view == 'ABMCA':
         ABMCAlumno(root)
+    elif new_view == 'buscar arch':
+        BuscarArchivo(root)
 
 
 def center(n):
@@ -115,6 +118,7 @@ class Login:
                                  column=1,
                                  columnspan=3,
                                  sticky=N)
+        center(master)
         # Main loop
         self.frame.mainloop()
 
@@ -185,7 +189,7 @@ class MenuPrincipalP(Frame):
                                  sticky=E + W)
         self.button_carga_bd = Button(self.frame,
                                       text="Inicializar sesión de trabajo",
-                                      command = self.buscar_archivo)
+                                      command=lambda: swap_view(self, 'buscar arch'))
         self.button_carga_bd.grid(pady=0,
                                   ipadx=75,
                                   row=3,
@@ -205,11 +209,11 @@ class MenuPrincipalP(Frame):
         self.button_back_up = Button(self.frame,
                                      text="BackUp")
         self.button_back_up.grid(pady=0,
-                                  ipadx=75,
-                                  row=5,
-                                  column=0,
-                                  columnspan=1,
-                                  sticky=E + W)
+                                 ipadx=75,
+                                 row=5,
+                                 column=0,
+                                 columnspan=1,
+                                 sticky=E + W)
         self.button_list_t_alu = Button(self.frame,
                                         text="Tabla Alumnos")
         self.button_list_t_alu.grid(pady=0,
@@ -253,15 +257,6 @@ class MenuPrincipalP(Frame):
 
         # Center
         center(master)
-
-    def buscar_archivo(self):
-        options = {'initialdir': os.getcwd()}
-        global arch
-        arch = askopenfilename(**options)
-        if arch == "":
-            return None
-        else:
-            bd.cargar_alumnos(arch, talumno)
 
     def terminate(self):
         self.frame.pack_forget()
@@ -490,6 +485,50 @@ class ElimUs(Frame):
         self.frame.pack_forget()
         self.frame.destroy()
 
+
+# ******************************************************************************************************************** #
+class BuscarArchivo(Frame):
+    def __init__(self, master, **kw):
+        super().__init__(master, **kw)
+        self.frame = Frame(master)
+        self.frame.pack()
+        # Set title
+        master.title('buscar')
+        self.nombre = StringVar()
+        self.label_aviso = Label(self.frame, text='Para crear complete el campo de abajo y oprima Aceptar. Para buscar'+
+                                                  'presione el botón Buscar')
+        self.label_aviso.grid(pady=0, row=0, column=0, columnspan=2, sticky=E + W)
+        self.label_nombre = Label(self.frame, text='Nombre del archivo')
+        self.label_nombre.grid(pady=0, row=2, column=0, sticky=E + W)
+        self.entry_nombre = Entry(self.frame, textvariable=self.nombre)
+        self.entry_nombre.grid(pady=0, row=2, column=1, sticky=E + W)
+        self.button_aceptar = Button(self.frame, text="Aceptar", command=self.aceptar)
+        self.button_aceptar.grid(pady=0, row=3, column=0, sticky=E + W)
+        self.button_buscar = Button(self.frame, text="Buscar", command=self.buscar)
+        self.button_buscar.grid(pady=0, row=3, column=1, sticky=E + W)
+        self.button_volver = Button(self.frame, text="Volver", command=lambda: swap_view(self, 'MP'))
+        self.button_volver.grid(pady=0, row=4, column=0, sticky=E + W)
+
+    def aceptar(self):
+        global arch
+        arch = self.nombre.get()
+        bd.cargar_alumnos(arch, talumno)
+
+    def buscar(self):
+        options = {'initialdir': os.getcwd()}
+        global arch
+        arch = askopenfilename(**options)
+        if arch == "":
+            return None
+        else:
+            bd.cargar_alumnos(arch, talumno)
+
+    def terminate(self):
+        self.frame.pack_forget()
+        self.frame.destroy()
+
+
+# ******************************************************************************************************************** #
 class ABMCAlumno(Frame):
     def __init__(self, master, **kw):
         super().__init__(master, **kw)
@@ -669,7 +708,7 @@ class ABMCAlumno(Frame):
         self.entry_nota13.grid(pady=0, row=18, column=1, sticky=E + W)
         self.entry_nota21 = Entry(self.frame, textvariable=self.nota21)
         self.entry_nota21.grid(pady=0, row=19, column=1, sticky=E + W)
-        self.entry_nota22= Entry(self.frame, textvariable=self.nota22)
+        self.entry_nota22 = Entry(self.frame, textvariable=self.nota22)
         self.entry_nota22.grid(pady=0, row=20, column=1, sticky=E + W)
         self.entry_nota23 = Entry(self.frame, textvariable=self.nota23)
         self.entry_nota23.grid(pady=0, row=21, column=1, sticky=E + W)
@@ -736,13 +775,12 @@ class ABMCAlumno(Frame):
         # Center
         center(master)
 
-
     def alta(self):
         self.label_error.config(text=' ')
         try:
-            nacimiento = eval('('+str(self.nacimientos.get())+')')
-            alta_colegio = eval('('+str(self.alta_colegios.get())+')')
-            baja_colegio = eval('('+str(self.baja_colegios.get())+')')
+            nacimiento = eval('(' + str(self.nacimientos.get()) + ')')
+            alta_colegio = eval('(' + str(self.alta_colegios.get()) + ')')
+            baja_colegio = eval('(' + str(self.baja_colegios.get()) + ')')
             alumn = talumno.buscar_alumno(self.nro_registro.get())
             if alumn is None:
                 usu = 'A-' + self.usuario.get()
@@ -761,10 +799,10 @@ class ABMCAlumno(Frame):
                             Materia(8, 'Computacion', self.nota91.get(), self.nota92.get(), self.nota93.get())]
                 alumno.set_materias(materias)
                 talumno.cargar_alumno(alumno)
-                bd.registrar_usuario('A-'+str(self.usuario.get()),self.clave.get())
+                bd.registrar_usuario('A-' + str(self.usuario.get()), self.clave.get())
                 global arch
-                bd.grabar_alumnos(talumno,arch)
-                swap_view(self,'ABMCA')
+                bd.grabar_alumnos(talumno, arch)
+                swap_view(self, 'ABMCA')
             else:
                 self.label_error.config(text='El numero de registro ya existe')
         except SyntaxError:
@@ -921,7 +959,7 @@ class ABMCAlumno(Frame):
                 alumno.mod_alumno(us, cl, no, ap, dn, di, te, em, na, cu, al, ba, co, ina, mats)
                 talumno.cargar_alumno(alumno)
                 global arch
-                bd.grabar_alumnos(talumno,arch)
+                bd.grabar_alumnos(talumno, arch)
                 swap_view(self, 'ABMCA')
         except SyntaxError:
             self.label_error.config(text='Hay campos con errores')
