@@ -1,6 +1,7 @@
 from Clases.Alumno import Alumno
-from Clases.T_Alumnos import T_Alumnos
 from Clases.Materia import Materia
+from Clases.T_Alumnos import T_Alumnos
+from Clases.T_Materias import T_Materias
 
 
 class BD_Escuela:
@@ -9,7 +10,9 @@ class BD_Escuela:
         self.cant_usuarios = 1
         self.acceso = {'P-Admin': 'Ad1'}
         self.nbre_tablas = {'T_Alumnos':0, 'T_Materias': 1}
-        self.tablas = ['T_Alumnos', 'T_Materias']
+        self.__t_alumnos = T_Alumnos()
+        self.__t_materias = T_Materias()
+        self.tablas = [self.__t_alumnos, self.__t_materias]
 
     def cargar_usuarios(self):
         self.cant_usuarios = 0
@@ -43,7 +46,7 @@ class BD_Escuela:
         self.grabar_usuarios()
         return self.acceso
 
-    def cargar_alumnos(self, arch,talumnos:T_Alumnos):
+    def cargar_alumnos(self, arch):
         i = 0
         with open(arch, 'r') as f:
             for linea in f:
@@ -107,10 +110,11 @@ class BD_Escuela:
                             Materia(6, 'Historia', nota71, nota72, nota73), Materia(7, 'Geografia', nota81, nota82, nota83),
                             Materia(8, 'Computacion', nota91, nota92, nota93)]
                 alumno.set_materias(materias)
-                talumnos.cargar_alumno(alumno)
+                self.__t_alumnos.cargar_alumno(alumno)
         f.close()
+        return self.__t_alumnos
 
-    def grabar_alumnos(self, talumnos:T_Alumnos, arch):
+    def grabar_alumnos(self, arch, talumnos:T_Alumnos):
         alumnos_aux = talumnos.get_lista()
         alumnos = list(alumnos_aux.items())
         with open (arch, 'w') as f:

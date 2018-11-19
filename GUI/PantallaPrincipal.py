@@ -10,6 +10,7 @@ FUENTE = 'Tahoma'
 TAMANOF = '14'
 
 global arch
+global talumno
 talumno = T_Alumnos()
 bd = BD_Escuela()
 
@@ -24,10 +25,20 @@ def swap_view(old_view, new_view):
         RegUs(root)
     elif new_view == 'eliminar_usuario':
         ElimUs(root)
-    elif new_view == 'ABMCA':
-        ABMCAlumno(root)
+    elif new_view == 'Alta':
+        Alta(root)
+    elif new_view == 'Baja':
+        Baja(root)
+    elif new_view == 'Consulta':
+        # Consulta(root)
+        a=0
+    elif new_view == 'Modificacion':
+        # Modificacion(root)
+        a = 0
     elif new_view == 'buscar arch':
         BuscarArchivo(root)
+    elif new_view == 'back_up':
+        BackUp(root)
 
 
 def center(n):
@@ -196,30 +207,41 @@ class MenuPrincipalP(Frame):
                                   column=0,
                                   columnspan=1,
                                   sticky=E + W)
-        self.button_abmc_alu = Button(self.frame,
-                                      text="ABMC",
-                                      command=lambda: swap_view(self, 'ABMCA'))
-        self.button_abmc_alu.grid(pady=0,
-                                  ipadx=75,
-                                  row=4,
-                                  column=0,
-                                  columnspan=1,
-                                  sticky=E + W)
-
         self.button_back_up = Button(self.frame,
-                                     text="BackUp")
+                                     text="BackUp",
+                                     command = lambda: swap_view(self, 'back_up'))
         self.button_back_up.grid(pady=0,
                                  ipadx=75,
-                                 row=5,
+                                 row=4,
                                  column=0,
                                  columnspan=1,
                                  sticky=E + W)
+        self.button_abmc_alu = Button(self.frame,
+                                      text="Alta",
+                                      command=lambda: swap_view(self, 'Alta'))
+        self.button_abmc_alu.grid(pady=0,
+                                  ipadx=75,
+                                  row=1,
+                                  column=1,
+                                  columnspan=1,
+                                  sticky=E + W)
+
+        self.button_abmc_alu = Button(self.frame,
+                                      text="Baja",
+                                      command=lambda: swap_view(self, 'Baja'))
+        self.button_abmc_alu.grid(pady=0,
+                                  ipadx=75,
+                                  row=2,
+                                  column=1,
+                                  columnspan=1,
+                                  sticky=E + W)
+
         self.button_list_t_alu = Button(self.frame,
                                         text="Tabla Alumnos")
         self.button_list_t_alu.grid(pady=0,
                                     ipadx=0,
                                     row=1,
-                                    column=1,
+                                    column=2,
                                     columnspan=1,
                                     sticky=E + W)
         self.button_list_t_mat = Button(self.frame,
@@ -227,7 +249,7 @@ class MenuPrincipalP(Frame):
         self.button_list_t_mat.grid(pady=0,
                                     ipadx=75,
                                     row=2,
-                                    column=1,
+                                    column=2,
                                     columnspan=1,
                                     sticky=E + W)
         self.button_list_leg_a = Button(self.frame,
@@ -235,7 +257,7 @@ class MenuPrincipalP(Frame):
         self.button_list_leg_a.grid(pady=0,
                                     ipadx=75,
                                     row=3,
-                                    column=1,
+                                    column=2,
                                     columnspan=1,
                                     sticky=E + W)
         self.button_list_inas = Button(self.frame,
@@ -243,7 +265,7 @@ class MenuPrincipalP(Frame):
         self.button_list_inas.grid(pady=0,
                                    ipadx=75,
                                    row=4,
-                                   column=1,
+                                   column=2,
                                    columnspan=1,
                                    sticky=E + W)
         self.button_lis_reg_curso = Button(self.frame,
@@ -251,7 +273,7 @@ class MenuPrincipalP(Frame):
         self.button_lis_reg_curso.grid(pady=0,
                                        ipadx=75,
                                        row=5,
-                                       column=1,
+                                       column=2,
                                        columnspan=1,
                                        sticky=E + W)
 
@@ -298,12 +320,10 @@ class RegUs(Frame):
                                 column=1,
                                 sticky=E)
 
-        self.label_usr_incorrecto = Label(self.frame, text='El usuario ya existe')
+        self.label_usr_incorrecto = Label(self.frame, text='', fg='red')
         self.label_usr_incorrecto.grid(row=2,
                                        column=4,
                                        sticky=E)
-        self.label_usr_incorrecto.config(fg='red')
-        self.label_usr_incorrecto.grid_remove()
         self.label_clave = Label(self.frame,
                                  text="Contraseña:")
         self.label_clave.grid(row=3,
@@ -329,7 +349,7 @@ class RegUs(Frame):
                        ipadx=75,
                        row=4,
                        column=1,
-                       columnspan=3,
+                       columnspan=4,
                        sticky=N)
         # Botones
         self.button_registrar = Button(self.frame,
@@ -364,12 +384,15 @@ class RegUs(Frame):
             usr = 'A-' + self.usuario.get()
         clv = self.clave.get()
         user = usuarios.get(usr)
-        if usr == '' or clv == '':
-            user = None
+        if self.usuario.get() == '' or clv == '':
+            user = 'nonone'
         if user is None:
             bd.registrar_usuario(usr, clv)
         else:
-            self.label_usr_incorrecto.grid()
+            if user == 'nonone':
+                self.label_usr_incorrecto.config(text='Nombre de usuario inválido')
+            else:
+                self.label_usr_incorrecto.config(text='El usuario ya existe')
 
     def terminate(self):
         self.frame.pack_forget()
@@ -495,8 +518,9 @@ class BuscarArchivo(Frame):
         # Set title
         master.title('buscar')
         self.nombre = StringVar()
-        self.label_aviso = Label(self.frame, text='Para crear complete el campo de abajo y oprima Aceptar. Para buscar'+
-                                                  'presione el botón Buscar')
+        self.label_aviso = Label(self.frame,
+                                 text='Para crear complete el campo de abajo y oprima Aceptar. Para buscar' +
+                                      'presione el botón Buscar')
         self.label_aviso.grid(pady=0, row=0, column=0, columnspan=2, sticky=E + W)
         self.label_nombre = Label(self.frame, text='Nombre del archivo')
         self.label_nombre.grid(pady=0, row=2, column=0, sticky=E + W)
@@ -511,11 +535,12 @@ class BuscarArchivo(Frame):
 
     def aceptar(self):
         global arch
-        arch = self.nombre.get()+'.txt'
+        arch = self.nombre.get() + '.txt'
         f = open(arch, 'w')
         f.close()
-        bd.cargar_alumnos(arch, talumno)
-        self.label_aviso.config(text=arch+' Abierto')
+        global talumno
+        talumno = bd.cargar_alumnos(arch)
+        self.label_aviso.config(text=arch + ' Abierto')
 
     def buscar(self):
         options = {'initialdir': os.getcwd()}
@@ -524,7 +549,7 @@ class BuscarArchivo(Frame):
         if arch == "":
             return None
         else:
-            bd.cargar_alumnos(arch, talumno)
+            talumno = bd.cargar_alumnos(arch)
 
     def terminate(self):
         self.frame.pack_forget()
@@ -532,13 +557,59 @@ class BuscarArchivo(Frame):
 
 
 # ******************************************************************************************************************** #
-class ABMCAlumno(Frame):
+class BackUp(Frame):
     def __init__(self, master, **kw):
         super().__init__(master, **kw)
         self.frame = Frame(master)
         self.frame.pack()
         # Set title
-        master.title('ABMC')
+        master.title('buscar')
+        self.nombre = StringVar()
+        self.label_aviso = Label(self.frame,
+                                 text='Para crear complete el campo de abajo y oprima Aceptar. Para buscar' +
+                                      'presione el botón Buscar')
+        self.label_aviso.grid(pady=0, row=0, column=0, columnspan=2, sticky=E + W)
+        self.label_nombre = Label(self.frame, text='Nombre del archivo')
+        self.label_nombre.grid(pady=0, row=2, column=0, sticky=E + W)
+        self.entry_nombre = Entry(self.frame, textvariable=self.nombre)
+        self.entry_nombre.grid(pady=0, row=2, column=1, sticky=E + W)
+        self.button_aceptar = Button(self.frame, text="Aceptar", command=self.aceptar)
+        self.button_aceptar.grid(pady=0, row=3, column=0, sticky=E + W)
+        self.button_buscar = Button(self.frame, text="Buscar", command=self.buscar)
+        self.button_buscar.grid(pady=0, row=3, column=1, sticky=E + W)
+        self.button_volver = Button(self.frame, text="Volver", command=lambda: swap_view(self, 'MP'))
+        self.button_volver.grid(pady=0, row=4, column=0, sticky=E + W)
+
+    def aceptar(self):
+        global arch
+        arch = self.nombre.get() + '.txt'
+        f = open(arch, 'w')
+        f.close()
+        bd.grabar_alumnos(arch, talumno)
+        self.label_aviso.config(text=arch + 'cargado y abierto')
+
+    def buscar(self):
+        options = {'initialdir': os.getcwd()}
+        global arch
+        arch = askopenfilename(**options)
+        if arch == "":
+            self.label_aviso.config(text=arch + 'ningun archivo seleccionado')
+        else:
+            bd.grabar_alumnos(arch, talumno)
+
+    def terminate(self):
+        self.frame.pack_forget()
+        self.frame.destroy()
+
+
+# ******************************************************************************************************************** #
+class Alta(Frame):
+    def __init__(self, master, **kw):
+        super().__init__(master, **kw)
+        self.frame = Frame(master)
+        self.frame.pack()
+        # Set title
+        master.title('Alta')
         # las 30000 Variables para usar en widgets
         self.nro_registro = IntVar()
         nreg = talumno.nuevo_nro_registro()
@@ -804,8 +875,8 @@ class ABMCAlumno(Frame):
                 talumno.cargar_alumno(alumno)
                 bd.registrar_usuario('A-' + str(self.usuario.get()), self.clave.get())
                 global arch
-                bd.grabar_alumnos(talumno, arch)
-                swap_view(self, 'ABMCA')
+                # bd.grabar_alumnos(talumno, arch)
+                swap_view(self, 'Alta')
             else:
                 self.label_error.config(text='El numero de registro ya existe')
         except SyntaxError:
@@ -822,7 +893,7 @@ class ABMCAlumno(Frame):
                 usr = alumno.get_usuario()
                 bd.eliminar_usuario(usr)
                 talumno.eliminar_alumno(alumno)
-                swap_view(self, 'ABMCA')
+                swap_view(self, 'Alta')
         except SyntaxError:
             self.label_error.config(text='Hay campos con errores')
 
@@ -963,7 +1034,7 @@ class ABMCAlumno(Frame):
                 talumno.cargar_alumno(alumno)
                 global arch
                 bd.grabar_alumnos(talumno, arch)
-                swap_view(self, 'ABMCA')
+                swap_view(self, 'Alta')
         except SyntaxError:
             self.label_error.config(text='Hay campos con errores')
 
@@ -972,6 +1043,57 @@ class ABMCAlumno(Frame):
         self.frame.destroy()
 
 
+class Baja(Frame):
+    def __init__(self, master, **kw):
+        super().__init__(master, **kw)
+        self.frame = Frame(master)
+        self.frame.pack()
+        # Set title
+        master.title('Baja')
+
+        self.nro_registro = IntVar()
+        nreg = talumno.nuevo_nro_registro()
+        self.nro_registro.set(nreg)
+
+        self.label_nro_registro = Label(self.frame, text='Numero de Registro')
+        self.label_nro_registro.grid(pady=0, row=1, column=0, sticky=E + W)
+
+        # Campos de texto
+        self.entry_nro_registro = Entry(self.frame, textvariable=self.nro_registro)
+        self.entry_nro_registro.grid(pady=0, row=1, column=1, sticky=E + W)
+
+
+        self.label_error = Label(self.frame, text=' ')
+        self.label_error.grid(pady=0, row=2, column=0, sticky=E + W)
+        self.label_error.config(fg='red')
+
+        self.button_baja = Button(self.frame, text="Baja", command=self.baja)
+        self.button_baja.grid(pady=0, row=3, column=0, columnspan=2, sticky=E + W)
+
+        self.button_volver = Button(self.frame, text='Volver', command=lambda: swap_view(self, 'MP'))
+        self.button_volver.grid(pady=0, row=4, column=0, sticky=E + W)
+
+        # Center
+        center(master)
+
+    def baja(self):
+        self.label_error.config(text=' ')
+        try:
+            nroreg = int(self.nro_registro.get())
+            alumno = talumno.buscar_alumno(nroreg)
+            if alumno is None:
+                self.label_error.config(text='El numero de registro no existe')
+            else:
+                usr = alumno.get_usuario()
+                bd.eliminar_usuario(usr)
+                talumno.eliminar_alumno(alumno)
+                self.label_error.config(text='Alumno dado de baja correctamente', fg='green')
+        except SyntaxError:
+            self.label_error.config(text='Hay campos con errores')
+
+    def terminate(self):
+        self.frame.pack_forget()
+        self.frame.destroy()
 root = Tk()
 # Set login
 Login(root)
