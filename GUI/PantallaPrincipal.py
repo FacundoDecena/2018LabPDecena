@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter.filedialog import *
-# import tkinter.ttk as tkk
+from GUI.TableScroll import Table
 from Clases.BD_Escuela import BD_Escuela
 from Clases.T_Alumnos import T_Alumnos
 from Clases.Alumno import Alumno
@@ -10,6 +10,7 @@ FUENTE = 'Tahoma'
 TAMANOF = '14'
 
 global arch
+arch = ''
 global talumno
 talumno = T_Alumnos()
 bd = BD_Escuela()
@@ -31,14 +32,14 @@ def swap_view(old_view, new_view):
         Baja(root)
     elif new_view == 'Consulta':
         Consulta(root)
-        a = 0
     elif new_view == 'Modificacion':
         Modificacion(root)
-        a = 0
     elif new_view == 'buscar arch':
         BuscarArchivo(root)
     elif new_view == 'back_up':
         BackUp(root)
+    elif new_view == 'tabla_a':
+        TablaA()
 
 
 def center(n):
@@ -257,7 +258,8 @@ class MenuPrincipalP(Frame):
                                  sticky=E + W)
 
         self.button_list_t_alu = Button(self.frame,
-                                        text="Tabla Alumnos")
+                                        text="Tabla Alumnos",
+                                        command=lambda: swap_view(self, 'tabla_a'))
         self.button_list_t_alu.grid(pady=0,
                                     ipadx=0,
                                     row=1,
@@ -420,8 +422,6 @@ class RegUs(Frame):
 
 
 # ******************************************************************************************************************** #
-
-
 class ElimUs(Frame):
     def __init__(self, master, **kw):
         super().__init__(master, **kw)
@@ -960,7 +960,7 @@ class Baja(Frame):
                 self.label_error.config(text='Alumno dado de baja correctamente', fg='green')
         except SyntaxError:
             self.label_error.config(text='Hay campos con errores')
-        except :
+        except:
             self.label_error.config(text='Hay campos con valores invalidos')
 
     def terminate(self):
@@ -1656,7 +1656,7 @@ class Modificacion(Frame):
                 talumno.cargar_alumno(alumno)
         except SyntaxError:
             self.label_error.config(text='Hay campos con errores')
-        except :
+        except:
             self.label_error.config(text='Hay campos con valores invalidos')
 
     def terminate(self):
@@ -1665,6 +1665,28 @@ class Modificacion(Frame):
 
 
 # ******************************************************************************************************************** #
+class TablaA(Frame):
+    def __init__(self, padre, bd):
+        self.root = Toplevel(padre)
+        self.bd = bd
+        tablas = self.bd.getTablas()
+
+        self.table = Table(self.root,
+                           ["Nro de Registro", "Código de Materia", "Nombre", "Nota 1C", "Nota 2C", "Nota 3C"],
+                           column_minwidths=[None, None, None, None, None, None], height=700)
+        self.table.pack(expand=True, fill=X, padx=10, pady=10)
+
+        for materia in tablas[1]:
+            notas = materia.getNotas()
+            registro = materia.getCodigoAlumno()
+            codigo = materia.getCodigoMateria()
+            nombre = materia.getNombre()
+            self.table.insert_row([registro, codigo, nombre, notas[0], notas[1], notas[2]])
+
+        self.root.update()
+        self.root.geometry("%sx%s" % (self.root.winfo_reqwidth(), 250))
+
+        self.root.mainloop()
 root = Tk()
 # Set login
 Login(root)
