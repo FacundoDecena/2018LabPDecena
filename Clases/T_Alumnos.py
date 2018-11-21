@@ -14,7 +14,7 @@ class T_Alumnos:
     def eliminar_alumno(self, alumno):
         hoy = time.strftime("%d/%m/%y")
         l_aux = hoy.split("/")
-        baja = (l_aux[0], l_aux[1], l_aux[2])
+        baja = (int(l_aux[0]), int(l_aux[1]), int(l_aux[2]))
         actu_alumno = alumno.set_baja(baja)
 
     def buscar_alumno(self,registro):

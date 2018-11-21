@@ -14,6 +14,7 @@ arch = ''
 global talumno
 talumno = T_Alumnos()
 bd = BD_Escuela()
+global es_prog
 
 
 def swap_view(old_view, new_view):
@@ -39,7 +40,9 @@ def swap_view(old_view, new_view):
     elif new_view == 'back_up':
         BackUp(root)
     elif new_view == 'tabla_a':
-        TablaA()
+        TablaA(root)
+    elif new_view == 'tabla_a':
+        TablaM(root)
 
 
 def center(n):
@@ -141,10 +144,14 @@ class Login:
         usr = ''
         if self.om_selected.get() == 'Programador':
             usr = 'P-' + self.usuario.get()
+            global es_prog
+            es_prog = True
         if self.om_selected.get() == 'Docente':
             usr = 'D-' + self.usuario.get()
+            es_prog = False
         if self.om_selected.get() == 'Alumno':
             usr = 'A-' + self.usuario.get()
+            es_prog = False
         clv = self.clave.get()
         try:
             if usuarios[usr] == clv:
@@ -181,6 +188,7 @@ class MenuPrincipalP(Frame):
         self.frame.rowconfigure(5, weight=1)
         self.frame.rowconfigure(6, weight=1)
         # Botones
+        global es_prog
         self.button_reg_us = Button(self.frame,
                                     text='Registrar un Usuario',
                                     command=lambda: swap_view(self, 'registrar_usuario'))
@@ -190,6 +198,8 @@ class MenuPrincipalP(Frame):
                                 column=0,
                                 columnspan=1,
                                 sticky=E + W)
+        if es_prog == False:
+            self.button_reg_us.config(state='disabled')
         self.button_elim_us = Button(self.frame,
                                      text="Eliminar Usuario",
                                      command=lambda: swap_view(self, 'eliminar_usuario'))
@@ -199,6 +209,8 @@ class MenuPrincipalP(Frame):
                                  column=0,
                                  columnspan=1,
                                  sticky=E + W)
+        if es_prog == False:
+            self.button_elim_us.config(state='disabled')
         self.button_carga_bd = Button(self.frame,
                                       text="Inicializar sesión de trabajo",
                                       command=lambda: swap_view(self, 'buscar arch'))
@@ -208,6 +220,8 @@ class MenuPrincipalP(Frame):
                                   column=0,
                                   columnspan=1,
                                   sticky=E + W)
+        if es_prog == False:
+            self.button_carga_bd.config(state='disabled')
         self.button_back_up = Button(self.frame,
                                      text="BackUp",
                                      command=lambda: swap_view(self, 'back_up'))
@@ -217,6 +231,17 @@ class MenuPrincipalP(Frame):
                                  column=0,
                                  columnspan=1,
                                  sticky=E + W)
+        if es_prog == False:
+            self.button_back_up.config(state='disabled')
+        self.button_cerrar_sesion = Button(self.frame,
+                                           text="Cerrar Sesion",
+                                           command=lambda: swap_view(self, 'login'))
+        self.button_cerrar_sesion.grid(pady=0,
+                                       ipadx=75,
+                                       row=5,
+                                       column=0,
+                                       columnspan=1,
+                                       sticky=E + W)
         self.button_alta_alu = Button(self.frame,
                                       text="Alta",
                                       command=lambda: swap_view(self, 'Alta'))
@@ -226,7 +251,8 @@ class MenuPrincipalP(Frame):
                                   column=1,
                                   columnspan=1,
                                   sticky=E + W)
-
+        if es_prog == False:
+            self.button_alta_alu.config(state='disabled')
         self.button_baja_alu = Button(self.frame,
                                       text="Baja",
                                       command=lambda: swap_view(self, 'Baja'))
@@ -236,17 +262,19 @@ class MenuPrincipalP(Frame):
                                   column=1,
                                   columnspan=1,
                                   sticky=E + W)
-
-        self.button_mod_alu = Button(self.frame,
+        if es_prog == False:
+            self.button_baja_alu.config(state='disabled')
+        self.button_con_alu = Button(self.frame,
                                      text="Consulta",
                                      command=lambda: swap_view(self, 'Consulta'))
-        self.button_mod_alu.grid(pady=0,
+        self.button_con_alu.grid(pady=0,
                                  ipadx=75,
                                  row=3,
                                  column=1,
                                  columnspan=1,
                                  sticky=E + W)
-
+        if es_prog == False:
+            self.button_con_alu.config(state='disabled')
         self.button_mod_alu = Button(self.frame,
                                      text="Modificacion",
                                      command=lambda: swap_view(self, 'Modificacion'))
@@ -256,7 +284,8 @@ class MenuPrincipalP(Frame):
                                  column=1,
                                  columnspan=1,
                                  sticky=E + W)
-
+        if es_prog == False:
+            self.button_mod_alu.config(state='disabled')
         self.button_list_t_alu = Button(self.frame,
                                         text="Tabla Alumnos",
                                         command=lambda: swap_view(self, 'tabla_a'))
@@ -267,7 +296,8 @@ class MenuPrincipalP(Frame):
                                     columnspan=1,
                                     sticky=E + W)
         self.button_list_t_mat = Button(self.frame,
-                                        text="Tabla Materias")
+                                        text="Tabla Materias",
+                                        command=lambda: swap_view(self, 'tabla_m'))
         self.button_list_t_mat.grid(pady=0,
                                     ipadx=75,
                                     row=2,
@@ -649,7 +679,7 @@ class Alta(Frame):
         self.telefono = IntVar()
         self.email = StringVar()
         self.nacimientos = StringVar()
-        self.curso = StringVar()
+        self.curso = IntVar()
         self.alta_colegios = StringVar()
         self.baja_colegios = StringVar()
         self.baja_colegios.set('0,0,0')
@@ -960,8 +990,8 @@ class Baja(Frame):
                 self.label_error.config(text='Alumno dado de baja correctamente', fg='green')
         except SyntaxError:
             self.label_error.config(text='Hay campos con errores')
-        except:
-            self.label_error.config(text='Hay campos con valores invalidos')
+        '''except:
+            self.label_error.config(text='Hay campos con valores invalidos')'''
 
     def terminate(self):
         self.frame.pack_forget()
@@ -1666,27 +1696,144 @@ class Modificacion(Frame):
 
 # ******************************************************************************************************************** #
 class TablaA(Frame):
-    def __init__(self, padre, bd):
-        self.root = Toplevel(padre)
-        self.bd = bd
-        tablas = self.bd.getTablas()
+    def __init__(self, master, **kw):
+        super().__init__(master, **kw)
+        self.frame = Frame(master)
+        self.frame.pack()
+        # Set title
+        master.title('Tabla de Alumnos')
 
-        self.table = Table(self.root,
-                           ["Nro de Registro", "Código de Materia", "Nombre", "Nota 1C", "Nota 2C", "Nota 3C"],
-                           column_minwidths=[None, None, None, None, None, None], height=700)
-        self.table.pack(expand=True, fill=X, padx=10, pady=10)
+        self.button_volver = Button(self.frame, text='Volver', command=lambda: swap_view(self,'MP'))
+        self.button_volver.grid(row=0, column=0, sticky=E)
 
-        for materia in tablas[1]:
-            notas = materia.getNotas()
-            registro = materia.getCodigoAlumno()
-            codigo = materia.getCodigoMateria()
-            nombre = materia.getNombre()
-            self.table.insert_row([registro, codigo, nombre, notas[0], notas[1], notas[2]])
+        self.table = Table(self.frame,
+                           ['Nro de Registro', 'Nombre', 'Apellido', 'DNI', 'Dirección', 'Telefono', 'e-mail',
+                            'Nacimiento', 'Curso', 'Fehca Alta', 'Fecha Baja', 'Concepto', 'Inasistencia'],
+                           column_minwidths=[None, None, None, None, None, None, None, None, None, None, None,
+                                             None, None],
+                           height=700)
+        self.table.grid(row=2,
+                        column=0,
+                        padx=10,
+                        pady=10,
+                        sticky=E+W+N+S)
 
-        self.root.update()
-        self.root.geometry("%sx%s" % (self.root.winfo_reqwidth(), 250))
+        global talumno
+        alumnos_dic = talumno.get_lista()
+        alumnos = alumnos_dic.values()
+        for alumno in alumnos:
+            re = alumno.get_numero_registro()
+            no = alumno.get_nombre()
+            ap = alumno.get_apellido()
+            dn = alumno.get_dni()
+            di = alumno.get_direccion()
+            te = alumno.get_telefono()
+            em = alumno.get_email()
+            na = str(alumno.get_nacimiento())
+            cu = alumno.get_curso()
+            al = str(alumno.get_alta())
+            ba = str(alumno.get_baja())
+            co = alumno.get_concepto()
+            ina = alumno.get_inasistencia()
 
-        self.root.mainloop()
+            self.table.insert_row([re, no, ap, dn, di, te, em, na, cu, al, ba, co, ina])
+
+        self.frame.update()
+        center(master)
+
+        self.frame.mainloop()
+
+    def terminate(self):
+        self.frame.pack_forget()
+        self.frame.destroy()
+
+
+# ******************************************************************************************************************** #
+class TablaM(Frame):
+    def __init__(self, master, **kw):
+        super().__init__(master, **kw)
+        self.frame = Frame(master)
+        self.frame.pack()
+        # Set title
+        master.title('Tabla de Materias')
+
+        self.button_volver = Button(self.frame, text='Volver', command=lambda: swap_view(self,'MP'))
+        self.button_volver.grid(row=0, column=0, sticky=E)
+
+        self.table = Table(self.frame,
+                           ['Nro Registro', 'Codigo Materia', 'Nombre', 'Nota 1er Cuatrimeste', 'Nota 2do Cuatrimeste',
+                            'Nota eer Cuatrimeste'],
+                           column_minwidths=[None, None, None, None, None, None],
+                           height=700)
+        self.table.grid(row=2,
+                        column=0,
+                        padx=10,
+                        pady=10,
+                        sticky=E+W+N+S)
+
+        global talumno
+        alumnos_dic = talumno.get_lista()
+        alumnos = alumnos_dic.values()
+        for alumno in alumnos:
+            re = alumno.get_numero_registro()
+            materias = alumno.get_materias()
+            mate = materias[0]
+            mate1 = mate.get_calificacion1er()
+            mate2 = mate.get_calificacion2do()
+            mate3 = mate.get_calificacion3er()
+            leng = materias[1]
+            leng1 = leng.get_calificacion1er()
+            leng2 = leng.get_calificacion2do()
+            leng3 = leng.get_calificacion3er()
+            fisi = materias[2]
+            fisi1 = fisi.get_calificacion1er()
+            fisi2 = fisi.get_calificacion2do()
+            fisi3 = fisi.get_calificacion3er()
+            qui = materias[3]
+            qui1 = qui.get_calificacion1er()
+            qui2 = qui.get_calificacion2do()
+            qui3 = qui.get_calificacion3er()
+            bio = materias[4]
+            bio1 = bio.get_calificacion1er()
+            bio2 = bio.get_calificacion2do()
+            bio3 = bio.get_calificacion3er()
+            eti = materias[5]
+            eti1 = eti.get_calificacion1er()
+            eti2 = eti.get_calificacion2do()
+            eti3 = eti.get_calificacion3er()
+            his = materias[6]
+            his1 = his.get_calificacion1er()
+            his2 = his.get_calificacion2do()
+            his3 = his.get_calificacion3er()
+            geo = materias[7]
+            geo1 = geo.get_calificacion1er()
+            geo2 = geo.get_calificacion2do()
+            geo3 = geo.get_calificacion3er()
+            comp = materias[8]
+            comp1 = comp.get_calificacion1er()
+            comp2 = comp.get_calificacion2do()
+            comp3 = comp.get_calificacion3er()
+
+            self.table.insert_row([re, 0, 'Matematicas', mate1, mate2, mate3])
+            self.table.insert_row([re, 1, 'Lengua', mate1, mate2, mate3])
+            self.table.insert_row([re, 2, 'Fisica', mate1, mate2, mate3])
+            self.table.insert_row([re, 3, 'Quimica', mate1, mate2, mate3])
+            self.table.insert_row([re, 4, 'Biologia', mate1, mate2, mate3])
+            self.table.insert_row([re, 5, 'Etica', mate1, mate2, mate3])
+            self.table.insert_row([re, 6, 'Historia', mate1, mate2, mate3])
+            self.table.insert_row([re, 7, 'Geografia', mate1, mate2, mate3])
+            self.table.insert_row([re, 8, 'Computacion', mate1, mate2, mate3])
+
+        self.frame.update()
+        center(master)
+
+        self.frame.mainloop()
+
+    def terminate(self):
+        self.frame.pack_forget()
+        self.frame.destroy()
+
+
 root = Tk()
 # Set login
 Login(root)

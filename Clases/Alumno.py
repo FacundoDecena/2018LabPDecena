@@ -131,7 +131,7 @@ class Alumno:
         te = str(self.__telefono)
         em = self.__email
         na = str(self.__nacimiento)
-        cu = self.__curso
+        cu = str(self.__curso)
         al = str(self.__alta_colegio)
         ba = str(self.__baja_colegio)
         co = self.__concepto
