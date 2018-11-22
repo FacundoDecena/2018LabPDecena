@@ -11,6 +11,7 @@
       <w>apellido</w>
       <w>baja</w>
       <w>botones</w>
+      <w>buscar</w>
       <w>calificacion</w>
       <w>clave</w>
       <w>codigo</w>
@@ -21,14 +22,17 @@
       <w>contraseña</w>
       <w>crear</w>
       <w>creo</w>
+      <w>cuatrimeste</w>
       <w>curso</w>
       <w>direccion</w>
       <w>escuela</w>
       <w>este</w>
+      <w>faltas</w>
       <w>fecha</w>
       <w>fuente</w>
       <w>inasistencia</w>
       <w>iniciar</w>
+      <w>legajo</w>
       <w>lista</w>
       <w>materia</w>
       <w>materias</w>
@@ -45,9 +49,11 @@
       <w>tamanof</w>
       <w>telefono</w>
       <w>texto</w>
+      <w>todos</w>
       <w>usuario</w>
       <w>usuarios</w>
       <w>ventana</w>
+      <w>volver</w>
     </words>
   </dictionary>
 </component>

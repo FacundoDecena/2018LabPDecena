@@ -102,6 +102,7 @@ class Alumno:
     def set_materias(self, materias):
         self.__materias=materias
 
+
     def mod_alumno(self, userp, passwordp, nombrep, apellidop, dnip, direccionp, telefonop, emailp,
                    nacimientop, cursop, altap, bajap, conceptop, inasistenciap, materiasp):
         self.__usuario = userp

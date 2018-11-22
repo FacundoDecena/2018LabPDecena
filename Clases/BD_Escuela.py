@@ -76,7 +76,7 @@ class BD_Escuela:
                     telefono = datos_alumno[7]
                     email = datos_alumno[8]
                     nacimientos = datos_alumno[9]
-                    curso = datos_alumno[10]
+                    curso = int(datos_alumno[10])
                     alta_colegios = datos_alumno[11]
                     baja_colegios = datos_alumno[12]
                     concepto = datos_alumno[13]

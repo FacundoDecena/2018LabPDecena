@@ -41,9 +41,14 @@ def swap_view(old_view, new_view):
         BackUp(root)
     elif new_view == 'tabla_a':
         TablaA(root)
-    elif new_view == 'tabla_a':
+    elif new_view == 'tabla_m':
         TablaM(root)
-
+    elif new_view == 'legajo':
+        Legajo(root)
+    elif new_view == 'readmision':
+        Readmision(root)
+    elif new_view == 'curso':
+        Curso(root)
 
 def center(n):
     # Center window
@@ -198,7 +203,7 @@ class MenuPrincipalP(Frame):
                                 column=0,
                                 columnspan=1,
                                 sticky=E + W)
-        if es_prog == False:
+        if not es_prog:
             self.button_reg_us.config(state='disabled')
         self.button_elim_us = Button(self.frame,
                                      text="Eliminar Usuario",
@@ -305,7 +310,8 @@ class MenuPrincipalP(Frame):
                                     columnspan=1,
                                     sticky=E + W)
         self.button_list_leg_a = Button(self.frame,
-                                        text="Legajo")
+                                        text="Legajo",
+                                        command=lambda: swap_view(self, 'legajo'))
         self.button_list_leg_a.grid(pady=0,
                                     ipadx=75,
                                     row=3,
@@ -313,7 +319,8 @@ class MenuPrincipalP(Frame):
                                     columnspan=1,
                                     sticky=E + W)
         self.button_list_inas = Button(self.frame,
-                                       text="Solicitudes de readmision")
+                                       text="Solicitudes de readmision",
+                                       command=lambda: swap_view(self, 'readmision'))
         self.button_list_inas.grid(pady=0,
                                    ipadx=75,
                                    row=4,
@@ -321,7 +328,8 @@ class MenuPrincipalP(Frame):
                                    columnspan=1,
                                    sticky=E + W)
         self.button_lis_reg_curso = Button(self.frame,
-                                           text="Listado Alumnos")
+                                           text="Listado Alumnos",
+                                           command=lambda: swap_view(self, 'curso'))
         self.button_lis_reg_curso.grid(pady=0,
                                        ipadx=75,
                                        row=5,
@@ -1703,8 +1711,8 @@ class TablaA(Frame):
         # Set title
         master.title('Tabla de Alumnos')
 
-        self.button_volver = Button(self.frame, text='Volver', command=lambda: swap_view(self,'MP'))
-        self.button_volver.grid(row=0, column=0, sticky=E)
+        self.button_volver = Button(self.frame, text='Volver', command=lambda: swap_view(self, 'MP'))
+        self.button_volver.grid(row=0, column=1, sticky=E)
 
         self.table = Table(self.frame,
                            ['Nro de Registro', 'Nombre', 'Apellido', 'DNI', 'Dirección', 'Telefono', 'e-mail',
@@ -1712,7 +1720,7 @@ class TablaA(Frame):
                            column_minwidths=[None, None, None, None, None, None, None, None, None, None, None,
                                              None, None],
                            height=700)
-        self.table.grid(row=2,
+        self.table.grid(row=0,
                         column=0,
                         padx=10,
                         pady=10,
@@ -1757,15 +1765,15 @@ class TablaM(Frame):
         # Set title
         master.title('Tabla de Materias')
 
-        self.button_volver = Button(self.frame, text='Volver', command=lambda: swap_view(self,'MP'))
-        self.button_volver.grid(row=0, column=0, sticky=E)
+        self.button_volver = Button(self.frame, text='Volver', command=lambda: swap_view(self, 'MP'))
+        self.button_volver.grid(row=0, column=2, sticky=E)
 
         self.table = Table(self.frame,
                            ['Nro Registro', 'Codigo Materia', 'Nombre', 'Nota 1er Cuatrimeste', 'Nota 2do Cuatrimeste',
-                            'Nota eer Cuatrimeste'],
+                            'Nota 3er Cuatrimeste'],
                            column_minwidths=[None, None, None, None, None, None],
                            height=700)
-        self.table.grid(row=2,
+        self.table.grid(row=0,
                         column=0,
                         padx=10,
                         pady=10,
@@ -1815,19 +1823,215 @@ class TablaM(Frame):
             comp3 = comp.get_calificacion3er()
 
             self.table.insert_row([re, 0, 'Matematicas', mate1, mate2, mate3])
-            self.table.insert_row([re, 1, 'Lengua', mate1, mate2, mate3])
-            self.table.insert_row([re, 2, 'Fisica', mate1, mate2, mate3])
-            self.table.insert_row([re, 3, 'Quimica', mate1, mate2, mate3])
-            self.table.insert_row([re, 4, 'Biologia', mate1, mate2, mate3])
-            self.table.insert_row([re, 5, 'Etica', mate1, mate2, mate3])
-            self.table.insert_row([re, 6, 'Historia', mate1, mate2, mate3])
-            self.table.insert_row([re, 7, 'Geografia', mate1, mate2, mate3])
-            self.table.insert_row([re, 8, 'Computacion', mate1, mate2, mate3])
+            self.table.insert_row([re, 1, 'Lengua', leng1, leng2, leng3])
+            self.table.insert_row([re, 2, 'Fisica', fisi1, fisi2, fisi3])
+            self.table.insert_row([re, 3, 'Quimica', qui1, qui2, qui3])
+            self.table.insert_row([re, 4, 'Biologia', bio1, bio2, bio3])
+            self.table.insert_row([re, 5, 'Etica', eti1, eti2, eti3])
+            self.table.insert_row([re, 6, 'Historia', his1, his2, his3])
+            self.table.insert_row([re, 7, 'Geografia', geo1, geo2, geo3])
+            self.table.insert_row([re, 8, 'Computacion', comp1, comp2, comp3])
 
         self.frame.update()
         center(master)
 
         self.frame.mainloop()
+
+    def terminate(self):
+        self.frame.pack_forget()
+        self.frame.destroy()
+
+
+# ******************************************************************************************************************** #
+class Legajo(Frame):
+    def __init__(self, master, **kw):
+        super().__init__(master, **kw)
+        self.frame = Frame(master)
+        self.frame.pack()
+        # Set title
+        master.title('Legajo')
+        self.__dni = IntVar()
+        self.__label_dni = Label(self.frame,
+                                 text="DNI:")
+        self.__label_dni.grid(row=0,
+                                column=0,
+                                sticky=W)
+
+        self.label_dni_incorrecto = Label(self.frame, text='', fg='red')
+        self.label_dni_incorrecto.grid(row=2,
+                                       column=0,
+                                       columnspan=1,
+                                       sticky=W+E)
+        self.entry_dni = Entry(self.frame,
+                                   textvariable=self.__dni)
+        self.entry_dni.grid(pady=0,
+                                row=1,
+                                column=0,
+                                sticky=E + W)
+        self.button_buscar = Button(self.frame,
+                                    text='Buscar',
+                                    command=self.fill_tabla)
+        self.button_buscar.grid(row=3,
+                                column=0,
+                                columnspan=1,
+                                sticky=W)
+        self.button_volver = Button(self.frame,
+                                    text='Volver',
+                                    command=lambda: swap_view(self,'MP'))
+        self.button_volver.grid(row=3,
+                                column=2,
+                                columnspan=1,
+                                sticky=W)
+        self.table_dp = Table(self.frame,
+                           ['Nro de Registro', 'Nombre', 'Apellido', 'DNI', 'Dirección', 'Telefono', 'e-mail',
+                            'Nacimiento', 'Curso', 'Fehca Alta', 'Fecha Baja', 'Concepto', 'Inasistencia'],
+                           column_minwidths=[None, None, None, None, None, None, None, None, None, None, None,
+                                             None, None],
+                           height=100)
+        self.table_dp.grid(row=4,
+                        column=0,
+                        padx=10,
+                        pady=10,
+                        columnspan=3,
+                        sticky=E + W + N + S)
+
+        self.table_notas = Table(self.frame,
+                           ['Codigo Materia', 'Nombre', 'Nota 1er Cuatrimeste', 'Nota 2do Cuatrimeste',
+                            'Nota 3er Cuatrimeste'],
+                           column_minwidths=[None, None, None, None, None],
+                           height=300)
+        self.table_notas.grid(row=5,
+                        column=0,
+                        padx=10,
+                        pady=10,
+                        columnspan=2,
+                        sticky=E + W + N + S)
+
+    def fill_tabla(self):
+        global talumno
+        dni_a = self.__dni.get()
+        alumno = talumno.buscar_por_dni(dni_a)
+        if alumno != None:
+            re = alumno.get_numero_registro()
+            no = alumno.get_nombre()
+            ap = alumno.get_apellido()
+            dn = alumno.get_dni()
+            di = alumno.get_direccion()
+            te = alumno.get_telefono()
+            em = alumno.get_email()
+            na = str(alumno.get_nacimiento())
+            cu = alumno.get_curso()
+            al = str(alumno.get_alta())
+            ba = str(alumno.get_baja())
+            co = alumno.get_concepto()
+            ina = alumno.get_inasistencia()
+            self.table_dp.insert_row([re, no, ap, dn, di, te, em, na, cu, al, ba, co, ina])
+            materias = alumno.get_materias()
+            mate = materias[0]
+            mate1 = mate.get_calificacion1er()
+            mate2 = mate.get_calificacion2do()
+            mate3 = mate.get_calificacion3er()
+            leng = materias[1]
+            leng1 = leng.get_calificacion1er()
+            leng2 = leng.get_calificacion2do()
+            leng3 = leng.get_calificacion3er()
+            fisi = materias[2]
+            fisi1 = fisi.get_calificacion1er()
+            fisi2 = fisi.get_calificacion2do()
+            fisi3 = fisi.get_calificacion3er()
+            qui = materias[3]
+            qui1 = qui.get_calificacion1er()
+            qui2 = qui.get_calificacion2do()
+            qui3 = qui.get_calificacion3er()
+            bio = materias[4]
+            bio1 = bio.get_calificacion1er()
+            bio2 = bio.get_calificacion2do()
+            bio3 = bio.get_calificacion3er()
+            eti = materias[5]
+            eti1 = eti.get_calificacion1er()
+            eti2 = eti.get_calificacion2do()
+            eti3 = eti.get_calificacion3er()
+            his = materias[6]
+            his1 = his.get_calificacion1er()
+            his2 = his.get_calificacion2do()
+            his3 = his.get_calificacion3er()
+            geo = materias[7]
+            geo1 = geo.get_calificacion1er()
+            geo2 = geo.get_calificacion2do()
+            geo3 = geo.get_calificacion3er()
+            comp = materias[8]
+            comp1 = comp.get_calificacion1er()
+            comp2 = comp.get_calificacion2do()
+            comp3 = comp.get_calificacion3er()
+
+            self.table_notas.insert_row([0, 'Matematicas', mate1, mate2, mate3])
+            self.table_notas.insert_row([1, 'Lengua', leng1, leng2, leng3])
+            self.table_notas.insert_row([2, 'Fisica', fisi1, fisi2, fisi3])
+            self.table_notas.insert_row([3, 'Quimica', qui1, qui2, qui3])
+            self.table_notas.insert_row([4, 'Biologia', bio1, bio2, bio3])
+            self.table_notas.insert_row([5, 'Etica', eti1, eti2, eti3])
+            self.table_notas.insert_row([6, 'Historia', his1, his2, his3])
+            self.table_notas.insert_row([7, 'Geografia', geo1, geo2, geo3])
+            self.table_notas.insert_row([8, 'Computacion', comp1, comp2, comp3])
+        else:
+            self.label_dni_incorrecto.config(text='No hay alumnos con dicho DNI')
+
+    def terminate(self):
+        self.frame.pack_forget()
+        self.frame.destroy()
+
+class Readmision(Frame):
+    def __init__(self, master, **kw):
+        super().__init__(master, **kw)
+        self.frame = Frame(master)
+        self.frame.pack()
+        # Set title
+        master.title('Readmision')
+
+        self.button_volver = Button(self.frame, text='Volver', command=lambda: swap_view(self, 'MP'))
+        self.button_volver.grid(row=0, column=1, sticky=E)
+
+        self.table = Table(self.frame,
+                           ['Nombre', 'Apellido', 'Curso', 'Concepto', 'Inasistencia'],
+                           column_minwidths=[None, None, None, None, None],
+                           height=700)
+        self.table.grid(row=0,
+                        column=0,
+                        padx=10,
+                        pady=10,
+                        sticky=E + W + N + S)
+
+        global talumno
+        faltantes = talumno.buscar_por_readmision()
+        for alumno in faltantes:
+            no = alumno.get_nombre()
+            ap = alumno.get_apellido()
+            cu = alumno.get_curso()
+            co = alumno.get_concepto()
+            ina = alumno.get_inasistencia()
+
+            self.table.insert_row([no, ap, cu, co, ina])
+
+        self.frame.update()
+
+    def terminate(self):
+        self.frame.pack_forget()
+        self.frame.destroy()
+
+
+
+class Curso(Frame):
+    def __init__(self, master, **kw):
+        super().__init__(master, **kw)
+        self.frame = Frame(master)
+        self.frame.pack()
+        # Set title
+        master.title('Alumnos por curso')
+
+        self.button_volver = Button(self.frame, text='Volver', command=lambda: swap_view(self, 'MP'))
+        self.button_volver.grid(row=0, column=1, sticky=E)
+
+        print(talumno.buscar_por_curso(5))
 
     def terminate(self):
         self.frame.pack_forget()
