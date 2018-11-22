@@ -1,4 +1,5 @@
 from tkinter import *
+import time
 from tkinter.filedialog import *
 from GUI.TableScroll import Table
 from Clases.BD_Escuela import BD_Escuela
@@ -692,6 +693,10 @@ class Alta(Frame):
         self.nacimientos = StringVar()
         self.curso = IntVar()
         self.alta_colegios = StringVar()
+        hoy = time.strftime("%d/%m/%y")
+        l_aux = hoy.split("/")
+        alta = str(l_aux[0])+ ',' + str(l_aux[1])+ ',' + str(l_aux[2])
+        self.alta_colegios.set(alta)
         self.baja_colegios = StringVar()
         self.baja_colegios.set('0,0,0')
         self.inasistencia = IntVar()
@@ -836,7 +841,7 @@ class Alta(Frame):
         self.entry_curso.grid(pady=0, row=11, column=1, sticky=E + W)
         self.entry_alta_colegio = Entry(self.frame, textvariable=self.alta_colegios)
         self.entry_alta_colegio.grid(pady=0, row=12, column=1, sticky=E + W)
-        self.entry_baja_colegio = Entry(self.frame, textvariable=self.baja_colegios)
+        self.entry_baja_colegio = Entry(self.frame, textvariable=self.baja_colegios, state='disabled')
         self.entry_baja_colegio.grid(pady=0, row=13, column=1, sticky=E + W)
         self.opt1 = OptionMenu(self.frame, self.om_selected, 'MA', 'A', 'NA')
         self.opt1.grid(pady=0, row=14, column=1, sticky=E + W)
@@ -1001,8 +1006,10 @@ class Baja(Frame):
                 self.label_error.config(text='Alumno dado de baja correctamente', fg='green')
         except SyntaxError:
             self.label_error.config(text='Hay campos con errores')
-        '''except:
-            self.label_error.config(text='Hay campos con valores invalidos')'''
+        except KeyError:
+            self.label_error.config(text='El alumno ya ha sido dado de baja')
+        except TclError:
+            self.label_error.config(text='Se espera un Número de registro')
 
     def terminate(self):
         self.frame.pack_forget()
@@ -1307,6 +1314,8 @@ class Consulta(Frame):
                 self.nota93.set(mats[8].get_calificacion3er())
         except SyntaxError:
             self.label_error.config(text='Hay campos con errores')
+        except TclError:
+            self.label_error.config(text='Se espera un Número de registro')
 
     def terminate(self):
         self.frame.pack_forget()
@@ -1480,7 +1489,7 @@ class Modificacion(Frame):
         self.entry_curso.grid(pady=0, row=11, column=1, sticky=E + W)
         self.entry_alta_colegio = Entry(self.frame, textvariable=self.alta_colegios)
         self.entry_alta_colegio.grid(pady=0, row=12, column=1, sticky=E + W)
-        self.entry_baja_colegio = Entry(self.frame, textvariable=self.baja_colegios)
+        self.entry_baja_colegio = Entry(self.frame, textvariable=self.baja_colegios, state='disabled')
         self.entry_baja_colegio.grid(pady=0, row=13, column=1, sticky=E + W)
         self.om_selected.set('MA')
         self.opt1 = OptionMenu(self.frame, self.om_selected, 'MA', 'A', 'NA')
@@ -1565,7 +1574,7 @@ class Modificacion(Frame):
             nroreg = int(self.nro_registro.get())
             alumno = talumno.buscar_alumno(nroreg)
             if alumno is None:
-                self.label_error.config(text='El numero de registro no existe')
+                self.label_error.config(text='El numero de registro no existe', fg='red')
             else:
                 self.usuario.set(alumno.get_usuario())
                 self.clave.set(alumno.get_clave())
@@ -1613,7 +1622,9 @@ class Modificacion(Frame):
                 self.nota92.set(mats[8].get_calificacion2do())
                 self.nota93.set(mats[8].get_calificacion3er())
         except SyntaxError:
-            self.label_error.config(text='Hay campos con errores')
+            self.label_error.config(text='Hay campos con errores', fg='red')
+        except TclError:
+            self.label_error.config(text='Se espera un Número de registro', fg='red')
 
     def modificar(self):
         global talumno
@@ -1622,7 +1633,7 @@ class Modificacion(Frame):
             nroreg = int(self.nro_registro.get())
             alumno = talumno.buscar_alumno(nroreg)
             if alumno is None:
-                self.label_error.config(text='El numero de registro no existe')
+                self.label_error.config(text='El numero de registro no existe', fg='red')
             else:
                 us = str(self.usuario.get())
                 cl = str(self.clave.get())
@@ -1694,9 +1705,13 @@ class Modificacion(Frame):
                 mats[8].set_calificacion2do(n92)
                 mats[8].set_calificacion3er(n93)
                 alumno.mod_alumno(us, cl, no, ap, dn, di, te, em, na, cu, al, ba, co, ina, mats)
+                bd.registrar_usuario(us,cl)
                 talumno.cargar_alumno(alumno)
+                self.label_error.config(text='Alumno modificado correctamente', fg='green')
         except SyntaxError:
             self.label_error.config(text='Hay campos con errores')
+        except TclError:
+            self.label_error.config(text='Se espera un Número de registro')
         except:
             self.label_error.config(text='Hay campos con valores invalidos')
 

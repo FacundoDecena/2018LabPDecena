@@ -107,6 +107,7 @@ class Alumno:
                    nacimientop, cursop, altap, bajap, conceptop, inasistenciap, materiasp):
         self.__usuario = userp
         self.__clave = passwordp
+
         self.__nombre = nombrep
         self.__apellido = apellidop
         self.__dni = dnip

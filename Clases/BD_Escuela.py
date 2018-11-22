@@ -33,8 +33,12 @@ class BD_Escuela:
     def registrar_usuario(self, user, pass_):
         usuario = user
         clave = pass_
-        self.__acceso[usuario] = clave
-        self.__cant_usuarios = self.__cant_usuarios+1
+        try:
+            u = self.__acceso[usuario]
+            self.__acceso[usuario] = clave
+        except KeyError:
+            self.__acceso[usuario] = clave
+            self.__cant_usuarios = self.__cant_usuarios+1
         return self.__acceso
 
     '''def grabar_usuarios(self):
@@ -44,8 +48,11 @@ class BD_Escuela:
         f.close()'''
 
     def eliminar_usuario(self, usr):
-        del self.__acceso[usr]
-        return self.__acceso
+        try:
+            del self.__acceso[usr]
+            return self.__acceso
+        except:
+            raise KeyError
 
     def cargar_alumnos(self, arch):
         self.__t_alumnos.vaciar()
