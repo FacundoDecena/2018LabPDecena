@@ -69,3 +69,7 @@ class T_Alumnos:
 
     def nuevo_nro_registro(self):
         return len(self.__lista) + 1
+
+    def vaciar(self):
+        self.__lista.clear()
+        return self.__lista

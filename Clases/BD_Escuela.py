@@ -48,7 +48,12 @@ class BD_Escuela:
         return self.__acceso
 
     def cargar_alumnos(self, arch):
-        i = 0
+        self.__t_alumnos.vaciar()
+        self.__t_materias.vaciar()
+        self.__acceso.clear()
+        self.__acceso = {'P-Admin': 'ad1'} # No nos podemos olvidar de nuestro superusuario
+        self.__cant_usuarios = 1
+
         with open(arch, 'r') as f:
             try:
                 c_u = int(f.readline())
@@ -122,6 +127,7 @@ class BD_Escuela:
                                 Materia(6, 'Historia', nota71, nota72, nota73), Materia(7, 'Geografia', nota81, nota82, nota83),
                                 Materia(8, 'Computacion', nota91, nota92, nota93)]
                     alumno.set_materias(materias)
+                    self.__t_materias.cargar_materia(nro_registro,materias)
                     self.__t_alumnos.cargar_alumno(alumno)
             except ValueError:
                 pass # Dado que el archivo esta vacio no hay nada que leer
