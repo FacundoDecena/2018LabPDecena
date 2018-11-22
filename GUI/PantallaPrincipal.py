@@ -51,6 +51,7 @@ def swap_view(old_view, new_view):
     elif new_view == 'curso':
         Curso(root)
 
+
 def center(n):
     # Center window
     n.eval('tk::PlaceWindow %s center' % n.winfo_pathname(n.winfo_id()))
@@ -215,7 +216,7 @@ class MenuPrincipalP(Frame):
                                  column=0,
                                  columnspan=1,
                                  sticky=E + W)
-        if es_prog == False:
+        if not es_prog:
             self.button_elim_us.config(state='disabled')
         self.button_carga_bd = Button(self.frame,
                                       text="Inicializar sesión de trabajo",
@@ -226,7 +227,7 @@ class MenuPrincipalP(Frame):
                                   column=0,
                                   columnspan=1,
                                   sticky=E + W)
-        if es_prog == False:
+        if not es_prog:
             self.button_carga_bd.config(state='disabled')
         self.button_back_up = Button(self.frame,
                                      text="BackUp",
@@ -237,7 +238,7 @@ class MenuPrincipalP(Frame):
                                  column=0,
                                  columnspan=1,
                                  sticky=E + W)
-        if es_prog == False:
+        if not es_prog:
             self.button_back_up.config(state='disabled')
         self.button_cerrar_sesion = Button(self.frame,
                                            text="Cerrar Sesion",
@@ -257,7 +258,7 @@ class MenuPrincipalP(Frame):
                                   column=1,
                                   columnspan=1,
                                   sticky=E + W)
-        if es_prog == False:
+        if not es_prog:
             self.button_alta_alu.config(state='disabled')
         self.button_baja_alu = Button(self.frame,
                                       text="Baja",
@@ -268,7 +269,7 @@ class MenuPrincipalP(Frame):
                                   column=1,
                                   columnspan=1,
                                   sticky=E + W)
-        if es_prog == False:
+        if not es_prog:
             self.button_baja_alu.config(state='disabled')
         self.button_con_alu = Button(self.frame,
                                      text="Consulta",
@@ -279,7 +280,7 @@ class MenuPrincipalP(Frame):
                                  column=1,
                                  columnspan=1,
                                  sticky=E + W)
-        if es_prog == False:
+        if not es_prog:
             self.button_con_alu.config(state='disabled')
         self.button_mod_alu = Button(self.frame,
                                      text="Modificacion",
@@ -290,7 +291,7 @@ class MenuPrincipalP(Frame):
                                  column=1,
                                  columnspan=1,
                                  sticky=E + W)
-        if es_prog == False:
+        if not es_prog:
             self.button_mod_alu.config(state='disabled')
         self.button_list_t_alu = Button(self.frame,
                                         text="Tabla Alumnos",
@@ -337,7 +338,6 @@ class MenuPrincipalP(Frame):
                                        column=2,
                                        columnspan=1,
                                        sticky=E + W)
-
         # Center
         center(master)
 
@@ -678,7 +678,7 @@ class Alta(Frame):
         self.frame.pack()
         # Set title
         master.title('Alta')
-        # las 30000 Variables para usar en widgets
+        # Variables para usar en widgets
         self.nro_registro = IntVar()
         nreg = talumno.nuevo_nro_registro()
         self.nro_registro.set(nreg)
@@ -695,7 +695,7 @@ class Alta(Frame):
         self.alta_colegios = StringVar()
         hoy = time.strftime("%d/%m/%y")
         l_aux = hoy.split("/")
-        alta = str(l_aux[0])+ ',' + str(l_aux[1])+ ',' + str(l_aux[2])
+        alta = str(l_aux[0]) + ',' + str(l_aux[1]) + ',' + str(l_aux[2])
         self.alta_colegios.set(alta)
         self.baja_colegios = StringVar()
         self.baja_colegios.set('0,0,0')
@@ -730,7 +730,7 @@ class Alta(Frame):
         self.nota91 = IntVar()
         self.nota92 = IntVar()
         self.nota93 = IntVar()
-        # los 30000 widgets
+        # widgets
         self.label_nro_registro = Label(self.frame, text='Numero de Registro')
         self.label_nro_registro.grid(pady=0, row=1, column=0, sticky=E + W)
         self.label_usuario = Label(self.frame, text='Usuario')
@@ -1705,7 +1705,7 @@ class Modificacion(Frame):
                 mats[8].set_calificacion2do(n92)
                 mats[8].set_calificacion3er(n93)
                 alumno.mod_alumno(us, cl, no, ap, dn, di, te, em, na, cu, al, ba, co, ina, mats)
-                bd.registrar_usuario(us,cl)
+                bd.registrar_usuario(us, cl)
                 talumno.cargar_alumno(alumno)
                 self.label_error.config(text='Alumno modificado correctamente', fg='green')
         except SyntaxError:
@@ -1742,13 +1742,13 @@ class TablaA(Frame):
                         column=0,
                         padx=10,
                         pady=10,
-                        sticky=E+W+N+S)
+                        sticky=E + W + N + S)
 
         global talumno
         alumnos_dic = talumno.get_lista()
         alumnos = alumnos_dic.values()
         for alumno in alumnos:
-            re = alumno.get_numero_registro()
+            reg = alumno.get_numero_registro()
             no = alumno.get_nombre()
             ap = alumno.get_apellido()
             dn = alumno.get_dni()
@@ -1762,7 +1762,7 @@ class TablaA(Frame):
             co = alumno.get_concepto()
             ina = alumno.get_inasistencia()
 
-            self.table.insert_row([re, no, ap, dn, di, te, em, na, cu, al, ba, co, ina])
+            self.table.insert_row([reg, no, ap, dn, di, te, em, na, cu, al, ba, co, ina])
 
         self.frame.update()
         center(master)
@@ -1795,13 +1795,13 @@ class TablaM(Frame):
                         column=0,
                         padx=10,
                         pady=10,
-                        sticky=E+W+N+S)
+                        sticky=E + W + N + S)
 
         global talumno
         alumnos_dic = talumno.get_lista()
         alumnos = alumnos_dic.values()
         for alumno in alumnos:
-            re = alumno.get_numero_registro()
+            reg = alumno.get_numero_registro()
             materias = alumno.get_materias()
             mate = materias[0]
             mate1 = mate.get_calificacion1er()
@@ -1840,15 +1840,15 @@ class TablaM(Frame):
             comp2 = comp.get_calificacion2do()
             comp3 = comp.get_calificacion3er()
 
-            self.table.insert_row([re, 0, 'Matematicas', mate1, mate2, mate3])
-            self.table.insert_row([re, 1, 'Lengua', leng1, leng2, leng3])
-            self.table.insert_row([re, 2, 'Fisica', fisi1, fisi2, fisi3])
-            self.table.insert_row([re, 3, 'Quimica', qui1, qui2, qui3])
-            self.table.insert_row([re, 4, 'Biologia', bio1, bio2, bio3])
-            self.table.insert_row([re, 5, 'Etica', eti1, eti2, eti3])
-            self.table.insert_row([re, 6, 'Historia', his1, his2, his3])
-            self.table.insert_row([re, 7, 'Geografia', geo1, geo2, geo3])
-            self.table.insert_row([re, 8, 'Computacion', comp1, comp2, comp3])
+            self.table.insert_row([reg, 0, 'Matematicas', mate1, mate2, mate3])
+            self.table.insert_row([reg, 1, 'Lengua', leng1, leng2, leng3])
+            self.table.insert_row([reg, 2, 'Fisica', fisi1, fisi2, fisi3])
+            self.table.insert_row([reg, 3, 'Quimica', qui1, qui2, qui3])
+            self.table.insert_row([reg, 4, 'Biologia', bio1, bio2, bio3])
+            self.table.insert_row([reg, 5, 'Etica', eti1, eti2, eti3])
+            self.table.insert_row([reg, 6, 'Historia', his1, his2, his3])
+            self.table.insert_row([reg, 7, 'Geografia', geo1, geo2, geo3])
+            self.table.insert_row([reg, 8, 'Computacion', comp1, comp2, comp3])
 
         self.frame.update()
         center(master)
@@ -1872,20 +1872,20 @@ class Legajo(Frame):
         self.__label_dni = Label(self.frame,
                                  text="DNI:")
         self.__label_dni.grid(row=0,
-                                column=0,
-                                sticky=W)
+                              column=0,
+                              sticky=W)
 
         self.label_dni_incorrecto = Label(self.frame, text='', fg='red')
         self.label_dni_incorrecto.grid(row=2,
                                        column=0,
                                        columnspan=1,
-                                       sticky=W+E)
+                                       sticky=W + E)
         self.entry_dni = Entry(self.frame,
-                                   textvariable=self.__dni)
+                               textvariable=self.__dni)
         self.entry_dni.grid(pady=0,
-                                row=1,
-                                column=0,
-                                sticky=E + W)
+                            row=1,
+                            column=0,
+                            sticky=E + W)
         self.button_buscar = Button(self.frame,
                                     text='Buscar',
                                     command=self.fill_tabla)
@@ -1895,42 +1895,42 @@ class Legajo(Frame):
                                 sticky=W)
         self.button_volver = Button(self.frame,
                                     text='Volver',
-                                    command=lambda: swap_view(self,'MP'))
+                                    command=lambda: swap_view(self, 'MP'))
         self.button_volver.grid(row=3,
                                 column=2,
                                 columnspan=1,
                                 sticky=W)
         self.table_dp = Table(self.frame,
-                           ['Nro de Registro', 'Nombre', 'Apellido', 'DNI', 'Dirección', 'Telefono', 'e-mail',
-                            'Nacimiento', 'Curso', 'Fehca Alta', 'Fecha Baja', 'Concepto', 'Inasistencia'],
-                           column_minwidths=[None, None, None, None, None, None, None, None, None, None, None,
-                                             None, None],
-                           height=100)
+                              ['Nro de Registro', 'Nombre', 'Apellido', 'DNI', 'Dirección', 'Telefono', 'e-mail',
+                               'Nacimiento', 'Curso', 'Fehca Alta', 'Fecha Baja', 'Concepto', 'Inasistencia'],
+                              column_minwidths=[None, None, None, None, None, None, None, None, None, None, None,
+                                                None, None],
+                              height=100)
         self.table_dp.grid(row=4,
-                        column=0,
-                        padx=10,
-                        pady=10,
-                        columnspan=3,
-                        sticky=E + W + N + S)
+                           column=0,
+                           padx=10,
+                           pady=10,
+                           columnspan=3,
+                           sticky=E + W + N + S)
 
         self.table_notas = Table(self.frame,
-                           ['Codigo Materia', 'Nombre', 'Nota 1er Cuatrimeste', 'Nota 2do Cuatrimeste',
-                            'Nota 3er Cuatrimeste'],
-                           column_minwidths=[None, None, None, None, None],
-                           height=300)
+                                 ['Codigo Materia', 'Nombre', 'Nota 1er Cuatrimeste', 'Nota 2do Cuatrimeste',
+                                  'Nota 3er Cuatrimeste'],
+                                 column_minwidths=[None, None, None, None, None],
+                                 height=300)
         self.table_notas.grid(row=5,
-                        column=0,
-                        padx=10,
-                        pady=10,
-                        columnspan=2,
-                        sticky=E + W + N + S)
+                              column=0,
+                              padx=10,
+                              pady=10,
+                              columnspan=2,
+                              sticky=E + W + N + S)
 
     def fill_tabla(self):
         global talumno
         dni_a = self.__dni.get()
         alumno = talumno.buscar_por_dni(dni_a)
-        if alumno != None:
-            re = alumno.get_numero_registro()
+        if alumno is not None:
+            reg = alumno.get_numero_registro()
             no = alumno.get_nombre()
             ap = alumno.get_apellido()
             dn = alumno.get_dni()
@@ -1943,7 +1943,7 @@ class Legajo(Frame):
             ba = str(alumno.get_baja())
             co = alumno.get_concepto()
             ina = alumno.get_inasistencia()
-            self.table_dp.insert_row([re, no, ap, dn, di, te, em, na, cu, al, ba, co, ina])
+            self.table_dp.insert_row([reg, no, ap, dn, di, te, em, na, cu, al, ba, co, ina])
             materias = alumno.get_materias()
             mate = materias[0]
             mate1 = mate.get_calificacion1er()

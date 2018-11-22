@@ -3,9 +3,6 @@ from Clases.Alumno import Alumno
 import time
 
 
-# from Clases.BD_Escuela import BD_Escuela
-
-
 class T_Alumnos:
     def __init__(self):
         self.__lista = {}

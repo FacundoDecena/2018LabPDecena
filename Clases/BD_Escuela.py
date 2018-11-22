@@ -14,19 +14,6 @@ class BD_Escuela:
         self.__t_materias = T_Materias()
         self.__tablas = [self.__t_alumnos, self.__t_materias]
 
-    '''def cargar_usuarios(self):
-        self.__cant_usuarios = 0
-        with open('Usuarios.txt', 'r') as f:
-            for linea in f:
-                usuario = linea.split(':')
-                user = usuario[0]
-                clave = usuario[1]
-                clave = clave[0:-1]
-                self.__acceso[user] = clave
-                self.__cant_usuarios = self.__cant_usuarios + 1
-        f.close()
-        return self.__acceso'''
-
     def cargar_usuarios(self):
         return self.__acceso
 
@@ -40,12 +27,6 @@ class BD_Escuela:
             self.__acceso[usuario] = clave
             self.__cant_usuarios = self.__cant_usuarios+1
         return self.__acceso
-
-    '''def grabar_usuarios(self):
-        with open('Usuarios.txt', 'w') as f:
-            for clave in self.__acceso.keys():
-                f.write(clave +':' + self.__acceso[clave] + '\n')
-        f.close()'''
 
     def eliminar_usuario(self, usr):
         try:
@@ -98,7 +79,8 @@ class BD_Escuela:
                     nacimiento = eval(nacimientos)
                     alta_colegio = eval(alta_colegios)
                     baja_colegio = eval(baja_colegios)
-                    alumno = Alumno(nro_registro,usuario,clave,nombre,apellido,dni,direccion,telefono,email,nacimiento,curso,alta_colegio,baja_colegio,concepto,inasistencia,maximo)
+                    alumno = Alumno(nro_registro, usuario, clave,nombre, apellido, dni, direccion, telefono, email,
+                                    nacimiento, curso, alta_colegio, baja_colegio, concepto, inasistencia, maximo)
                     # self.__acceso[usuario] = clave
                     # self.__cant_usuarios = self.__cant_usuarios + 1
                     nota11 = int(datos_alumno[16])

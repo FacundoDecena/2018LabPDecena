@@ -2,24 +2,6 @@ from Clases.Materia import Materia
 
 
 class Alumno:
-    # Las variables declaradas en el constructor deben seguir este formato
-    # __nro_registro :: int
-    # __nombre :: string
-    # __apellido :: string
-    # __dni :: int
-    # __direccion :: string
-    # __telefono :: int
-    # __email :: string
-    # __nacimiento :: (int, int, int)
-    # __curso :: int
-    # __alta_colegio :: (int, int, int)
-    # __baja_colegio :: (int, int, int)
-    # __user :: string
-    # __password :: string
-    # __concepto :: string
-    # __inasistencia :: int
-    # __materias :: [Materia]
-    # __maximo :: 15
     def __init__(self, nro_registrop=0, userp='', passwordp='', nombrep='', apellidop='a', dnip=0, direccionp='',
                  telefonop=0, emailp='', nacimientop=(0,0,0), cursop='', altap=(0,0,0), bajap=(0,0,0), conceptop='',
                  inasistenciap=0,maximop=15):
@@ -102,7 +84,6 @@ class Alumno:
     def set_materias(self, materias):
         self.__materias=materias
 
-
     def mod_alumno(self, userp, passwordp, nombrep, apellidop, dnip, direccionp, telefonop, emailp,
                    nacimientop, cursop, altap, bajap, conceptop, inasistenciap, materiasp):
         self.__usuario = userp
@@ -166,4 +147,3 @@ class Alumno:
             return 1
         self.__maximo = 30
         return 2
-
