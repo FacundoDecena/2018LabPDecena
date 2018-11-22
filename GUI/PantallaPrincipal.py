@@ -448,11 +448,14 @@ class RegUs(Frame):
             user = 'nonone'
         if user is None:
             bd.registrar_usuario(usr, clv)
+            self.label_usr_incorrecto.config(text='Usuario registrado correctamente', fg='green')
+            self.usuario.set('')
+            self.clave.set('')
         else:
             if user == 'nonone':
-                self.label_usr_incorrecto.config(text='Nombre de usuario inválido')
+                self.label_usr_incorrecto.config(text='Nombre de usuario o contraseña inválido', fg='red')
             else:
-                self.label_usr_incorrecto.config(text='El usuario ya existe')
+                self.label_usr_incorrecto.config(text='El usuario ya existe', fg='red')
 
     def terminate(self):
         self.frame.pack_forget()
@@ -493,12 +496,10 @@ class ElimUs(Frame):
                                 column=1,
                                 sticky=E)
 
-        self.label_usr_incorrecto = Label(self.frame, text='El usuario no existe')
+        self.label_usr_incorrecto = Label(self.frame, text='', fg='red')
         self.label_usr_incorrecto.grid(row=2,
                                        column=4,
                                        sticky=E)
-        self.label_usr_incorrecto.config(fg='red')
-        self.label_usr_incorrecto.grid_remove()
         self.label_estado = Label(self.frame,
                                   text="Eliminado:")
         self.label_estado.grid(row=3,
@@ -547,6 +548,7 @@ class ElimUs(Frame):
         center(master)
 
     def eliminar(self):
+        self.label_usr_incorrecto.config(text='')
         usuarios = bd.cargar_usuarios()
         usr = ''
         if self.om_selected.get() == 'Programador':
@@ -558,9 +560,10 @@ class ElimUs(Frame):
         user = usuarios.get(usr)
         if not (user is None):
             bd.eliminar_usuario(usr)
-            self.label_Estado.config(text='Si')
+            self.label_Estado.config(text='Si', fg='green')
+            self.usuario.set('')
         else:
-            self.label_usr_incorrecto.grid()
+            self.label_usr_incorrecto.config(text='El usuario no existe', fg='red')
 
     def terminate(self):
         self.frame.pack_forget()
@@ -1980,6 +1983,8 @@ class Legajo(Frame):
         self.frame.pack_forget()
         self.frame.destroy()
 
+
+# ******************************************************************************************************************** #
 class Readmision(Frame):
     def __init__(self, master, **kw):
         super().__init__(master, **kw)
@@ -2019,7 +2024,7 @@ class Readmision(Frame):
         self.frame.destroy()
 
 
-
+# ******************************************************************************************************************** #
 class Curso(Frame):
     def __init__(self, master, **kw):
         super().__init__(master, **kw)
