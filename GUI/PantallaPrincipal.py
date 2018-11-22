@@ -1719,7 +1719,7 @@ class TablaA(Frame):
                             'Nacimiento', 'Curso', 'Fehca Alta', 'Fecha Baja', 'Concepto', 'Inasistencia'],
                            column_minwidths=[None, None, None, None, None, None, None, None, None, None, None,
                                              None, None],
-                           height=700)
+                           height=500)
         self.table.grid(row=0,
                         column=0,
                         padx=10,
@@ -1772,7 +1772,7 @@ class TablaM(Frame):
                            ['Nro Registro', 'Codigo Materia', 'Nombre', 'Nota 1er Cuatrimeste', 'Nota 2do Cuatrimeste',
                             'Nota 3er Cuatrimeste'],
                            column_minwidths=[None, None, None, None, None, None],
-                           height=700)
+                           height=500)
         self.table.grid(row=0,
                         column=0,
                         padx=10,
@@ -2028,10 +2028,42 @@ class Curso(Frame):
         # Set title
         master.title('Alumnos por curso')
 
-        self.button_volver = Button(self.frame, text='Volver', command=lambda: swap_view(self, 'MP'))
-        self.button_volver.grid(row=0, column=1, sticky=E)
+        self.__curso = IntVar()
 
-        print(talumno.buscar_por_curso(5))
+        self.__label_curso = Label(self.frame, text='Curso')
+        self.__label_curso.grid(pady=0, row=0, column=0, sticky=E + W)
+
+        self.__entry_curso = Entry(self.frame, textvariable=self.__curso)
+        self.__entry_curso.grid(pady=0, row=0, column=1, sticky=E + W)
+
+        self.button_volver = Button(self.frame, text='Volver', command=lambda: swap_view(self, 'MP'))
+        self.button_volver.grid(row=1, column=3, sticky=E)
+
+        self.button_buscar = Button(self.frame, text='Buscar', command=self.fill_table)
+        self.button_buscar.grid(row=1, column=0, sticky=E)
+
+        self.table = Table(self.frame,
+                           ['Nombre', 'Apellido', 'DNI', 'Nro Registro'],
+                           column_minwidths=[None, None, None, None],
+                           height=500)
+        self.table.grid(row=2,
+                        column=0,
+                        columnspan=3,
+                        padx=10,
+                        pady=10,
+                        sticky=E + W + N + S)
+
+    def fill_table(self):
+        global talumno
+        cur = int(self.__curso.get())
+        curso = talumno.buscar_por_curso(cur)
+
+        for alumno in curso:
+            no = alumno[0]
+            ap = alumno[1]
+            dn = alumno[2]
+            reg = alumno[3]
+            self.table.insert_row([no, ap, dn, reg])
 
     def terminate(self):
         self.frame.pack_forget()
